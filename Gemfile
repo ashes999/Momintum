@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0.rc3'
 # Use SCSS for stylesheets
@@ -20,6 +19,14 @@ gem 'turbolinks', '2.3.0'
 gem 'jbuilder', '2.2.3'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '0.4.0', group: :doc
+
+# TODO: this requires changing config.rb to say "production"
+# but only on staging/production, not dev. Hmm.
+# That's too much for me right now. Figure this out later.
+#group :production do
+  gem 'pg',             '0.17.1'
+  gem 'rails_12factor', '0.0.2'
+#end
 
 group :development, :test do
     # Use sqlite3 as the database for Active Record
@@ -42,3 +49,5 @@ group :development, :test do
     # Use debugger
     # gem 'debugger', group: [:development, :test]
 end
+
+
