@@ -1,0 +1,14 @@
+### Publish to staging (for example)
+git push staging
+
+### Did you change gems? Run this.
+heroku run bundle install --app momintum-staging
+
+### Did you change schema? Run this.
+heroku run rake:db --app momintum-staging
+
+### Did you change CSS? Rebuild it.
+# Heroku permissions won't let this happen automatically, successfully.
+# (Can't write to public/assets)
+rake assets:precompile RAILS_ENV=production
+ 
