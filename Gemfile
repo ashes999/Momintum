@@ -19,6 +19,8 @@ gem 'turbolinks', '2.3.0'
 gem 'jbuilder', '2.2.3'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '0.4.0', group: :doc
+# Sass support for Bootstrap
+gem 'bootstrap-sass', '3.2.0.0'
 
 group :development, :test do
     # Use sqlite3 as the database for Active Record
