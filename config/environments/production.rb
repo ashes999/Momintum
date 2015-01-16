@@ -77,6 +77,21 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   
-  # For Devise. TODO: use GMail?
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  # Mailer settings
+  # dump errors if we can't send emails
+  config.action_mailer.raise_delivery_errors = true
+  
+  config.action_mailer.default_url_options = { :host => 'momintum.herokuapp.com' }
+  config.action_mailer.perform_deliveries = true
+  
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 2587,
+    domain:               'momintum.herokuapp.com',
+    user_name:            ENV['EMAIL_USER'],
+    password:             ENV['EMAIL_PASSWORD'],
+    authentication:       'plain',
+    enable_starttls_auto: true
+  }
 end

@@ -35,13 +35,18 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
   
-  # For devise
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  # Mailer settings
+  # dump errors if we can't send emails
+  config.action_mailer.raise_delivery_errors = true
+  
+  config.action_mailer.default_url_options = { :host => 'http://momintum-ashes999-1.c9.io:80' }
+  config.action_mailer.perform_deliveries = true
+  
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              'smtp.gmail.com',
     port:                 2587,
-    domain:               'https://momintum-ashes999-1.c9.io/',
+    domain:               'momintum-ashes999-1.c9.io',
     user_name:            ENV['EMAIL_USER'],
     password:             ENV['EMAIL_PASSWORD'],
     authentication:       'plain',
