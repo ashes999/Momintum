@@ -36,20 +36,17 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
   
   # Mailer settings
-  # dump errors if we can't send emails
+  config.action_mailer.default_url_options = { :host => 'momintum-ashes999-1.c9.io:80', :protocol => 'http' }
   config.action_mailer.raise_delivery_errors = true
-  
-  config.action_mailer.default_url_options = { :host => 'http://momintum-ashes999-1.c9.io:80' }
   config.action_mailer.perform_deliveries = true
-  
   config.action_mailer.delivery_method = :smtp
+  
   config.action_mailer.smtp_settings = {
     address:              'smtp.gmail.com',
-    port:                 2587,
-    domain:               'momintum-ashes999-1.c9.io',
+    port:                 587,
     user_name:            ENV['EMAIL_USER'],
     password:             ENV['EMAIL_PASSWORD'],
-    authentication:       'plain',
+    authentication:       :plain,
     enable_starttls_auto: true
   }
 end

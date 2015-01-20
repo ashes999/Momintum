@@ -78,20 +78,17 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   
   # Mailer settings
-  # dump errors if we can't send emails
+  config.action_mailer.default_url_options = { :host => 'momintum.herokuapp.com:80' }
   config.action_mailer.raise_delivery_errors = true
-  
-  config.action_mailer.default_url_options = { :host => 'momintum.herokuapp.com' }
   config.action_mailer.perform_deliveries = true
-  
   config.action_mailer.delivery_method = :smtp
+  
   config.action_mailer.smtp_settings = {
     address:              'smtp.gmail.com',
-    port:                 2587,
-    domain:               'momintum.herokuapp.com',
+    port:                 587,
     user_name:            ENV['EMAIL_USER'],
     password:             ENV['EMAIL_PASSWORD'],
-    authentication:       'plain',
+    authentication:       :plain,
     enable_starttls_auto: true
   }
 end
