@@ -1,5 +1,6 @@
 <% provide(:title, 'Admin Dashboard') %>
 <h1>Email Configuration</h1>
+
 <% if ENV['ADMIN_EMAIL'].nil? %>
   <p>It looks like the ADMIN_EMAIL environment variable is missing.</p>
 <% else %>
@@ -8,15 +9,12 @@
     <li><strong>ENV['EMAIL_USER']:</strong> <%= ENV['EMAIL_USER'] %></li>
     <li><strong>ENV['EMAIL_PASSWORD']:</strong> <%= ENV['EMAIL_PASSWORD'] %></li>
   </ul>
-<% end %>
 
-<% if !ENV['ADMIN_EMAIL'].nil? %>
-
-<h1>Environment Variables</h1>
-<ul>
-<% ENV.each do |k, v| %>
-  <li><strong>ENV['<%= k %>']:</strong> <%= v %></li>
-<% end %>
-</ul>
+  <h1>Environment Variables</h1>
+  <ul>
+  <% ENV.each do |k, v| %>
+    <li><strong>ENV['<%= k %>']:</strong> <%= v %></li>
+  <% end %>
+  </ul>
 
 <% end %>
