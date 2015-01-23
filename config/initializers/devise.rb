@@ -258,5 +258,4 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = '/my_engine/users/auth'
   
   config.mailer = 'MomintumMailer'
-  config.mailer_sender = 'robot@momintum.com'
 end
