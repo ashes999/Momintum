@@ -3,7 +3,7 @@ class FeatureMap
     # Not necessary (empty values indicate it's enabled), but this is a good place
     # to list all the supported features. Please use only boolean values.
     @hash = {
-      :email => false    # global email notifications
+      :email => true    # global email notifications
     }
   end
   
@@ -22,3 +22,7 @@ require File.expand_path('../application', __FILE__)
 Rails.application.initialize!
 
 Rails.configuration.feature_map = FeatureMap.new
+
+# Good place to change config (like mailer settings) since environment-specific
+# code is already evaluated. MomintumMailer.delivery_method doesn't do anything.
+ActionMailer::Base.delivery_method = :test if !Rails.configuration.feature_map.enabled?(:email)
