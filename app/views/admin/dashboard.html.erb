@@ -11,6 +11,14 @@
     <li><strong>ENV['TEST_ACCOUNT']:</strong> <%= ENV['TEST_ACCOUNT'] %></li>
   </ul>
 
+  <h1>Feature Map</h1>
+  <% all_features = [:email] %>
+  <ul>
+    <% all_features.each do |feature| %>
+      <li><strong><%= feature %>:</strong> <%= Rails.application.config.feature_map.enabled?(feature) %></li>
+    <% end %>
+  </ul>
+  
   <h1>Custom Rake Commands</h1>
   <ul>
     <li><strong>email:test</strong> sends a test email to <%= ENV['ADMIN_EMAIL'] %>, and a registration confirmation to <%= ENV['TEST_ACCOUNT'] %></li>
