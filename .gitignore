@@ -30,3 +30,6 @@ config/secrets.yml
 /vendor/assets/bower_components
 *.bowerrc
 bower.json
+
+# Spring files which seem to be generated
+sprint/*.pid
