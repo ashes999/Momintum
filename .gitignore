@@ -32,4 +32,4 @@ config/secrets.yml
 bower.json
 
 # Spring files which seem to be generated
-sprint/*.pid
+spring/*.pid
