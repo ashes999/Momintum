@@ -21,5 +21,8 @@ module Workspace
     # config.i18n.default_locale = :de
     
     config.autoload_paths += %W(#{config.root}/lib)
+    
+    require "#{config.root}/lib/feature_map"
+    config.feature_map = FeatureMap.new
   end
 end

@@ -3,8 +3,8 @@ class FeatureMap
     # Not necessary (empty values indicate it's enabled), but this is a good place
     # to list all the supported features. Please use only boolean values.
     @hash = hash || {
-      :email => true,   # global email notifications
-      :username => true # additional user name; used to log in
+      :email => true,     # global email notifications
+      :username => true  # additional user name; used to log in
     }
   end
   
