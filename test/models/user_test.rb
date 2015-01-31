@@ -3,6 +3,7 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   def setup
     @user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
+    @user.skip_confirmation! # skip emails if/when saved (eg. validation tests)
     if !@user.valid?
       raise "Test setup can't create a valid user: #{@user.errors.full_messages}"
     end
@@ -35,6 +36,36 @@ class UserTest < ActiveSupport::TestCase
       else
         assert_not(@user.valid?)
       end
+    end
+  end
+  
+  test "emails must be unique (regardless of case)" do
+    assert(@user.valid?)
+    @user.save
+    clone = User.new(:email => @user.email.upcase, :password => 'password', :username => @user.username)
+    begin
+      assert_not(clone.valid?)
+    rescue
+      @user.delete
+    end
+  end
+  
+  test "usernames must be unique (regardless of case)" do
+    assert(@user.valid?)
+    @user.save
+    clone = User.new(:email => 'test.two@test.com', :password => 'password', :username => @user.username.upcase)
+    begin
+      assert_not(clone.valid?)
+    rescue
+      @user.delete
+    end
+  end
+  
+  test "users with an empty username are not valid" do
+    emails = [nil, '', '          ']
+    emails.each do |e|
+      @user.username = e
+      assert_not(@user.valid?)
     end
   end
   
