@@ -260,6 +260,8 @@ Devise.setup do |config|
   config.mailer = 'MomintumMailer'
   
   # For username login
-  config.authentication_keys = [ :login ]
-  config.scoped_views = true
+  if Rails.application.config.feature_map.enabled?(:username)
+    config.authentication_keys = [ :login ]
+    config.scoped_views = true
+  end
 end

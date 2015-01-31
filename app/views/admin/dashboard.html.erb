@@ -12,7 +12,7 @@
   </ul>
 
   <h1>Feature Map</h1>
-  <% all_features = [:email] %>
+  <% all_features = [:email, :username] %>
   <ul>
     <% all_features.each do |feature| %>
       <li><strong><%= feature %>:</strong> <%= Rails.application.config.feature_map.enabled?(feature) %></li>
