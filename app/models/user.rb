@@ -5,6 +5,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
    # extras
    :confirmable, :timeoutable
+   
+  # always save emails as lower-case in the DB
+  before_save { self.email = email.downcase }
 
   validates :email,
     :presence => true,
