@@ -81,4 +81,12 @@ class UserTest < ActiveSupport::TestCase
       end
     end
   end
+  
+  test "passwords must be eight characters or longer" do
+    (1..30).each do |n|
+      @user.password = 'a' * n
+      assert_not(@user.valid?) if n <= 7
+      assert(@user.valid?) if n > 7
+    end
+  end
 end
