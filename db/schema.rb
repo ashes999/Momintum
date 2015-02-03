@@ -14,10 +14,10 @@
 ActiveRecord::Schema.define(version: 20150202044745) do
 
   create_table "sparks", force: true do |t|
-    t.string   "name"
-    t.string   "summary"
-    t.text     "description"
-    t.integer  "user_id"
+    t.string   "name",        null: false
+    t.string   "summary",     null: false
+    t.text     "description", null: false
+    t.integer  "owner_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20150202044745) do
     t.string   "unconfirmed_email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "username"
+    t.string   "username",               default: "", null: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

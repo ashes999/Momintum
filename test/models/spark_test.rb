@@ -49,6 +49,10 @@ class SparkTest < ActiveSupport::TestCase
       s2 = Spark.new(:name => 'Spark #2', :summary => 'Testing', :description => 'TBD', :user_id => user2.id)
       s2.save
       
+      # Ensure collections in-memory are up-to-date
+      user.sparks.reload
+      user2.sparks.reload
+      
       assert(user.sparks.include?(s1))
       assert_not(user.sparks.include?(s2))
       
@@ -60,4 +64,5 @@ class SparkTest < ActiveSupport::TestCase
       s1.delete unless s1.nil?
       s2.delete unless s2.nil?
     end
+  end
 end

@@ -4,8 +4,7 @@ class CreateSparks < ActiveRecord::Migration
       t.string :name, null: false, unique: true
       t.string :summary, null: false
       t.text :description, null: false
-      t.integer :owner_id
-
+      t.integer :owner_id, null: false, indexed: true
       t.timestamps null: false
     end
   end
