@@ -33,4 +33,31 @@ class SparkTest < ActiveSupport::TestCase
       s1.delete
     end
   end
+  
+  test "user owns sparks" do
+    user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
+    user.skip_confirmation! # skip emails if/when saved (eg. validation tests)
+    user.save
+    
+    begin
+      user2 = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
+      user2.skip_confirmation! # skip emails if/when saved (eg. validation tests)
+      
+      s1 = Spark.new(:name => 'Spark #1', :summary => 'Testing', :description => 'TBD', :user_id => user.id)
+      s1.save
+      
+      s2 = Spark.new(:name => 'Spark #2', :summary => 'Testing', :description => 'TBD', :user_id => user2.id)
+      s2.save
+      
+      assert(user.sparks.include?(s1))
+      assert_not(user.sparks.include?(s2))
+      
+      assert_not(user2.sparks.include?(s1))
+      assert(user2.sparks.include?(s2))
+    rescue
+      user.delete
+      user2.delete unless user2.nil?
+      s1.delete unless s1.nil?
+      s2.delete unless s2.nil?
+    end
 end

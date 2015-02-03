@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   # always save emails as lower-case in the DB
   before_save { self.email = email.downcase }
 
+  has_many :sparks
+
   validates :email,
     :presence => true,
     :uniqueness => {

@@ -8,5 +8,6 @@ class Spark < ActiveRecord::Base
   
   validates_presence_of :summary, :description
   
+  belongs_to :user, :foreign_key => :owner_id
   
 end
