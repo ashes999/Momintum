@@ -8,5 +8,7 @@ class Spark < ActiveRecord::Base
   
   validates_presence_of :summary, :description
   
-  belongs_to :user, :foreign_key => 'owner_id'
+  belongs_to :owner,  :class_name => :User, :foreign_key => 'owner_id' 
+  
+  validates :owner, :presence => true
 end
