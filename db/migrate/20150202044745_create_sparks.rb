@@ -7,5 +7,7 @@ class CreateSparks < ActiveRecord::Migration
       t.integer :owner_id, null: false, indexed: true
       t.timestamps null: false
     end
+    
+    add_foreign_key :sparks, :users, { :column => :owner_id, :on_delete => :cascade } #or :nullify
   end
 end

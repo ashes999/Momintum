@@ -4,11 +4,19 @@ class SparkTest < ActiveSupport::TestCase
   
   def reset_spark
     @spark = Spark.new(:name => 'Test Spark', :summary => 'For testing only', :description => 'TBD')
+    
+    @user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
+    @user.skip_confirmation! # skip emails if/when saved (eg. validation tests)
+    @user.save
   end
   
   setup do
     reset_spark
     assert(@spark.valid?, 'Failed to create valid spark in test setup')
+  end
+  
+  teardown do
+    @user.delete
   end
   
   test "name summary and description are required" do
@@ -25,7 +33,7 @@ class SparkTest < ActiveSupport::TestCase
   end
   
   test "spark names must be unique" do
-    s1 = Spark.create(:name => @spark.name, :summary => 'A copy-cat', :description => 'Testing')
+    s1 = Spark.create(:name => @spark.name, :summary => 'A copy-cat', :description => 'Testing', :owner_id => @user.id)
     
     begin
       assert_not(@spark.valid?)

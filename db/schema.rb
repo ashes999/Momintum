@@ -17,7 +17,8 @@ ActiveRecord::Schema.define(version: 20150202044745) do
     t.string   "name",        null: false
     t.string   "summary",     null: false
     t.text     "description", null: false
-    t.integer  "owner_id"
+    t.integer  "owner_id",    null: false
+    t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end

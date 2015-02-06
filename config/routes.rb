@@ -1,4 +1,18 @@
 Rails.application.routes.draw do
+  get 'sparks/index'
+
+  get 'sparks/new'
+
+  get 'sparks/create'
+
+  get 'sparks/show'
+
+  get 'sparks/edit'
+
+  get 'sparks/update'
+
+  get 'sparks/destroy'
+
   devise_for :users
   get 'users/new'
 
