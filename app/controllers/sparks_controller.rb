@@ -8,6 +8,10 @@ class SparksController < ApplicationController
   def create
   end
   
+  def index
+    @sparks = Spark.all
+  end
+  
   def show
   end
 

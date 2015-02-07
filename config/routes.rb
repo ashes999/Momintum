@@ -1,27 +1,16 @@
 Rails.application.routes.draw do
-  get 'sparks/index'
-
-  get 'sparks/new'
-
-  get 'sparks/create'
-
-  get 'sparks/show'
-
-  get 'sparks/edit'
-
-  get 'sparks/update'
-
-  get 'sparks/destroy'
-
-  devise_for :users
-  get 'users/new'
-
   root  'static_pages#home'
   get   'about'     => 'static_pages#about'
   get   'contact'   => 'static_pages#contact'
   get   'updates'   => 'static_pages#updates'
   get   'register'  => 'users#sign_up'
   get   'admin'     => 'admin#dashboard'
+
+  devise_for :users
+  get 'users/new'
+
+  resources :sparks
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
