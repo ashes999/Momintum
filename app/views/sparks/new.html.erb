@@ -1,2 +1,36 @@
-<h1>Sparks#new</h1>
-<p>Find me in app/views/sparks/new.html.erb</p>
+<h2>Create Spark</h2>
+
+<%= form_for(@spark, validate: true, url: { action: :create }, html: { class: 'form-horizontal' }) do |f| %>
+
+  <% if @spark.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@spark.errors.count, "error") %> prohibited this spark from being saved:</h2>
+   
+      <ul>
+      <% @spark.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :summary %><br />
+    <%= f.text_field :summary %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :description %><br />
+    Note: you can use <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown syntax</a>.<br />
+    <%= f.text_area :description, size: "70x10" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
