@@ -7,7 +7,17 @@ class SparksController < ApplicationController
   end
 
   def create
-    @spark.save
+    fields = params[:spark]
+    
+    @spark = Spark.new(:name => fields[:name], :summary => fields[:summary], 
+      :description => fields[:description], :owner_id => fields[:owner_id].to_i)
+      
+    if @spark.valid?
+      @spark.save
+      redirect_to @spark
+    else
+      render :action => 'new'
+    end
   end
   
   def index
@@ -15,6 +25,7 @@ class SparksController < ApplicationController
   end
   
   def show
+    @spark = Spark.find(params[:id])
   end
 
   def edit
