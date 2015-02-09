@@ -5,7 +5,7 @@ class SparkTest < ActiveSupport::TestCase
   def reset_spark
     @spark = Spark.new(:name => 'Test Spark', :summary => 'For testing only', :description => 'TBD')
     
-    @user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
+    @user = User.new(:username => 'test', :email => 'test.user@test.com', :password => 'test1234')
     @user.skip_confirmation! # skip emails if/when saved (eg. validation tests)
     @user.save
   end
@@ -71,6 +71,22 @@ class SparkTest < ActiveSupport::TestCase
       user2.delete unless user2.nil?
       s1.delete unless s1.nil?
       s2.delete unless s2.nil?
+    end
+  end
+  
+  test "deleting a user deletes their sparks" do
+    user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
+    user.skip_confirmation! # skip emails if/when saved (eg. validation tests)
+    user.save
+    
+    begin
+      spark = Spark.create(:name => 'Test spark', :summary => 'User deletion test', :description => 'TBA', owner_id => user.id)
+      id = spark.id
+      user.delete
+      assert(Spark.find_by_id(id).nil?)
+    rescue
+      user.delete unless user.nil? || User.find_by_id(user.id).nil?
+      spark.delete unless spark.nil?
     end
   end
 end

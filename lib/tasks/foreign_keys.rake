@@ -6,7 +6,7 @@ namespace :db do
     count = 0
     users = User.all
     Spark.all.each do |s|
-      if users.find_by_id(s.owner_id).nil?
+      if !s.owner_id.nil? && users.find_by_id(s.owner_id).nil?
         results += "#{s.name} (#{s.id}) references user #{s.owner_id}, " 
         count += 1
       end

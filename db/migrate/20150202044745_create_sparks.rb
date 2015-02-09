@@ -4,7 +4,8 @@ class CreateSparks < ActiveRecord::Migration
       t.string :name, null: false, unique: true
       t.string :summary, null: false
       t.text :description, null: false
-      t.integer :owner_id, null: false, indexed: true
+      # null is for orphaned sparks
+      t.integer :owner_id, null: true, indexed: true
       t.timestamps null: false
     end
     

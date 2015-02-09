@@ -10,8 +10,6 @@ class Spark < ActiveRecord::Base
   
   belongs_to :owner,  :class_name => :User, :foreign_key => 'owner_id' 
   
-  validates :owner, :presence => true
-  
   def is_owner?(user)
     return !user.nil? && user.id == self.owner.id
   end
