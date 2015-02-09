@@ -3,3 +3,4 @@
 <p><strong>Summary:</strong> <%= @spark.summary %></p>
 <p><strong>Description:</strong></p>
 <%= @spark.description %>
+<%= link_to 'Edit', edit_spark_path(@spark) if @spark.is_owner?(current_user) || @spark.is_on_team?(current_user) %>
