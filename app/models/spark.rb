@@ -1,5 +1,7 @@
 class Spark < ActiveRecord::Base
   
+  #TODO: unit tests
+  
   validates :name,
     :presence => true,
     :uniqueness => {
@@ -10,11 +12,7 @@ class Spark < ActiveRecord::Base
   
   belongs_to :owner,  :class_name => :User, :foreign_key => 'owner_id' 
   
-  def is_owner?(user)
-    return !user.nil? && user.id == self.owner.id
-  end
-  
-  def is_on_team?(user)
-    return false
+  def is_ownerless?
+    return self.owner_id.nil?
   end
 end

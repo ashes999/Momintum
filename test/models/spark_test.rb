@@ -89,4 +89,12 @@ class SparkTest < ActiveSupport::TestCase
       spark.delete unless spark.nil?
     end
   end
+  
+  test "is_ownerless? returns true if owner_id is nil" do
+    s = Spark.new(:name => 'One', :summary => 'Two', :description => 'Three')
+    assert(s.is_ownerless?)
+    
+    s.owner = @user
+    assert_not(s.is_ownerless?)
+  end
 end

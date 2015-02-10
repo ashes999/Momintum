@@ -89,4 +89,32 @@ class UserTest < ActiveSupport::TestCase
       assert(@user.valid?) if n > 7
     end
   end
+  
+  test "is_owner returns true if spark owner id matches user id" do
+    user = User.new(:username => 'test')
+    user.id = 1
+    
+    s = Spark.new
+    assert_not(user.is_owner?(s))
+    
+    s.owner = user
+    assert(user.is_owner?(s))
+    
+    s.owner_id = nil
+    assert_not(user.is_owner?(s))
+  end
+  
+  test "can_edit returns true for owner" do
+    user = User.new(:username => 'test')
+    user.id = 1
+    
+    s = Spark.new
+    assert_not(user.can_edit?(s))
+    
+    s.owner = user
+    assert(user.can_edit?(s))
+  end
+  
+  # test is_on_team is true
+  # test can_edit is true if on team
 end

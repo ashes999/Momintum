@@ -5,14 +5,14 @@
 
   <% if Rails.application.config.feature_map.enabled?(:username) %> 
     <div class="field">
-      <%= f.label :username %><br />
+      <%= f.label :username, autofocus: true %><br />
       <%= f.text_field :username %></p>
     </div>
   <% end %>
   
   <div class="field">
     <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+    <%= f.email_field :email, autofocus: !Rails.application.config.feature_map.enabled?(:username) %>
   </div>
 
   <div class="field">

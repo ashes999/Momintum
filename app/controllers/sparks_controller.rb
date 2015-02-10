@@ -29,6 +29,15 @@ class SparksController < ApplicationController
   end
 
   def edit
+    # TODO: integration tests.
+    @spark = Spark.find_by_id(params[:id])
+    if @spark.nil?
+      flash[:alert] = 'This spark seems to be gone.'
+      #redirect_to(:back)
+    elsif !current_user.can_edit?(@spark)
+      flash[:alert] = 'You don\'t have permission to edit this spark.'
+      #redirect_to(:back)
+    end
   end
 
   def update
