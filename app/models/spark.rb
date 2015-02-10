@@ -1,7 +1,5 @@
 class Spark < ActiveRecord::Base
   
-  #TODO: unit tests
-  
   validates :name,
     :presence => true,
     :uniqueness => {

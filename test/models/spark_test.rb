@@ -16,7 +16,7 @@ class SparkTest < ActiveSupport::TestCase
   end
   
   teardown do
-    @user.delete
+    @user.destroy
   end
   
   test "name summary and description are required" do

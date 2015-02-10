@@ -29,7 +29,6 @@ class SparksController < ApplicationController
   end
 
   def edit
-    # TODO: integration tests.
     @spark = Spark.find_by_id(params[:id])
     if @spark.nil?
       flash[:alert] = 'This spark seems to be gone.'
