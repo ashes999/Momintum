@@ -24,11 +24,4 @@
     <li><strong>email:test</strong> sends a test email to <%= ENV['ADMIN_EMAIL'] %>, and a registration confirmation to <%= ENV['TEST_ACCOUNT'] %></li>
   </ul>
 
-  <h1>Environment Variables</h1>
-  <ul>
-  <% ENV.each do |k, v| %>
-    <li><strong>ENV['<%= k %>']:</strong> <%= v %></li>
-  <% end %>
-  </ul>
-
 <% end %>

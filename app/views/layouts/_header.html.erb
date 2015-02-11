@@ -3,13 +3,13 @@
         <%= link_to "Momintum", root_path, id: "logo" %>
         <nav>
           <ul class="nav navbar-nav navbar-right">
-            <li><%= link_to "Home",     root_path %></li>
-            <li><%= link_to "About",    about_path %></li>
+            <li><%= link_to "Home", root_path %></li>
+            <li><%= link_to "About", about_path %></li>
              <% if user_signed_in? %>
                 <li><%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %></li>
                 <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
                 <% if !ENV['ADMIN_EMAIL'].nil? && current_user.email == ENV['ADMIN_EMAIL'] %>
-                  <li><%= link_to "Admin", 'admin',  :class => 'navbar-link' %></li>
+                  <li><%= link_to "Admin", admin_path, :class => 'navbar-link' %></li>
                 <% end %>
               <% else %>
                 <li><%= link_to "Register", new_user_registration_path, :class => 'navbar-link'  %></li>
