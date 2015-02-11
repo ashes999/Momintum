@@ -11,6 +11,6 @@ class Spark < ActiveRecord::Base
   belongs_to :owner,  :class_name => :User, :foreign_key => 'owner_id' 
   
   def is_ownerless?
-    return self.owner_id.nil?
+    return self.owner_id.nil? || self.owner.nil?
   end
 end
