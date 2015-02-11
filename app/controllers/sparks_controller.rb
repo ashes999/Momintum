@@ -2,6 +2,8 @@ class SparksController < ApplicationController
   
   before_filter :authenticate_user!, :except => [:show, :index]
   
+  attr_accessor :sparks # for controller functional testing
+  
   def new
     @spark = Spark.new
   end

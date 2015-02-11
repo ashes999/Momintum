@@ -6,13 +6,6 @@ class StaticPagesControllerTest < ActionController::TestCase
     assert_response :success
     assert_select "title", "Mass Collaboration for the Ummah | Momintum"
   end
-
-  test "should get about" do
-    #get :about
-    #assert_response :success
-    # title should be idea page
-    #assert_select "title", "About | Momintum"
-  end
   
   test "should get contact" do
     get :contact
