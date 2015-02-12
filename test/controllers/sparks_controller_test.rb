@@ -9,11 +9,6 @@ class SparksControllerTest < ActionController::TestCase
     @spark = Spark.create(:name => 'controller test', :description => 'test spark', :summary => 'test')
   end
   
-  teardown do
-    @user.destroy unless @user.nil?
-    @spark.destroy unless @spark.nil?
-  end
-  
   test "index has sparks" do
     get :index
     assert_not_nil assigns(:sparks)
@@ -70,5 +65,16 @@ class SparksControllerTest < ActionController::TestCase
     s = Spark.create(:name => 'spark', :description => 'tbd', :summary => 'summary')
     get(:edit, { :id => s.id })
     assert(flash[:alert].include?('permission'))
+  end
+  
+  test "edit edits the spark" do
+    sign_in(@user)
+    s = Spark.create(:name => 'spark', :description => 'tbd', :summary => 'summary', :owner_id => @user.id)
+    patch :update, :id => s.id, :spark => { name: 'updated name', summary: 'updated summary', description: 'updated description' }
+    s.reload
+    
+    assert_equal('updated name', s.name)
+    assert_equal('updated summary', s.summary)
+    assert_equal('updated description', s.description)
   end
 end

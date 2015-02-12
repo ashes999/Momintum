@@ -9,17 +9,13 @@ class SparksController < ApplicationController
   end
 
   def create
-    fields = params[:spark]
-    
-    @spark = Spark.new(:name => fields[:name], :summary => fields[:summary], 
-      :description => fields[:description], :owner_id => fields[:owner_id].to_i)
-      
-    if @spark.valid?
-      @spark.save
-      redirect_to @spark
-    else
-      render :action => 'new'
-    end
+    @spark = Spark.new
+    create_or_update()
+  end
+  
+  def update
+    @spark = Spark.find(params[:id])
+    create_or_update()
   end
   
   def index
@@ -40,10 +36,26 @@ class SparksController < ApplicationController
       #redirect_to(:back)
     end
   end
-
-  def update
-  end
-
+  
   def destroy
+  end
+  
+  private
+  
+  def create_or_update
+    fields = params[:spark]
+    
+    @spark.name = fields[:name]
+    @spark.summary = fields[:summary]
+    @spark.description = fields[:description]
+    # Don't update owner on edit
+    @spark.owner_id = fields[:owner_id].to_i if fields[:id].nil?
+      
+    if @spark.valid?
+      @spark.save
+      redirect_to @spark
+    else
+      render :action => 'edit'
+    end
   end
 end

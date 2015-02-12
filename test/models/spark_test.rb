@@ -15,10 +15,6 @@ class SparkTest < ActiveSupport::TestCase
     assert(@spark.valid?, 'Failed to create valid spark in test setup')
   end
   
-  teardown do
-    @user.destroy
-  end
-  
   test "name summary and description are required" do
     @spark.name = ''
     assert_not(@spark.valid?)
