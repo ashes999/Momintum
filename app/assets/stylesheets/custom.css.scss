@@ -100,3 +100,18 @@ footer {
     }
   }
 }
+
+.notice, .alert {
+  border: 1px solid;
+  padding: 8px;
+}
+
+.notice {
+  border-color: #0f0;
+  background: #dfd;
+}
+
+.alert {
+  border-color: #f00;
+  background: #fdd;
+}
