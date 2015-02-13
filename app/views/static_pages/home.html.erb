@@ -7,22 +7,11 @@
 <!--%= link_to image_tag("logo.png", alt: "Momintum logo"),
             'http://worx.momintum.com' %-->
 
-<h1>Newest Sparks</h1>
-<p><%= link_to 'Create new spark', new_spark_path %></p>
+<h2>What is Momintum?</h2>
+<ul>
+  <li><strong>Build sustainable business models</strong></li>
+  <li><strong>Solve world and social problems</strong></li>
+  <li><strong>Leverage the power of "crowd"</strong></li>
+</ul>
 
-<table>
-  <tbody>
-    <tr>
-      <th>Name</th>
-      <th>Summary</th>
-      <th>Description</th>
-    </tr>
-    <% @sparks.each do |s| %>
-      <tr>
-        <td><%= link_to s.name, s %></td>
-        <td><%= s.summary %></td>
-        <td><%= s.description[0, [s.description.length, 200].min] %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= link_to 'See what others are up to right now', sparks_path %>
