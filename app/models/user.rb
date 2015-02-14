@@ -53,4 +53,13 @@ class User < ActiveRecord::Base
   def can_edit?(spark)
     return !spark.is_ownerless? && (self.is_owner?(spark) || self.is_on_team?(spark))
   end
+  
+  # Name shown in the activity partial
+  def activity_name
+    if Rails.application.config.feature_map.enabled?(:username)
+      return self.username
+    else
+      return self.email
+    end
+  end
 end

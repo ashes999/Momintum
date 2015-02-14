@@ -1,0 +1,24 @@
+<%
+  content = activity.message
+  source_name = activity.source_object.activity_name
+  source_html = link_to source_name, activity.source_object
+  
+  target_name = activity.target_object.activity_name
+  target_html = link_to target_name, activity.target_object
+  
+  diff = (Time.new - activity.created_at).to_i
+  
+  case diff
+  when 0..60 
+    timestamp = "#{diff} seconds ago"
+  when 60..3600
+    timestamp = "#{diff / 60} minute(s) ago"
+  when 3600..86400
+    timestamp = "#{diff / 3600} hour(s) ago"
+  else
+    timestamp = "#{diff / 86400} day(s) ago"
+  end
+  
+  content = "#{content.gsub('{0}', source_html).gsub('{1}', target_html)} (#{timestamp})"
+%>
+<%= raw content %>

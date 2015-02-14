@@ -13,4 +13,14 @@ class Spark < ActiveRecord::Base
   def is_ownerless?
     return self.owner_id.nil? || self.owner.nil?
   end
+  
+  # name shown in the activity partial
+  def activity_name
+    return self.name
+  end
+  
+  def activities
+    to_return = Activity.where('(source_type = "spark" AND source_id = :id) OR (target_type = "spark" AND target_id = :id)',
+      { :id => self.id })
+  end
 end

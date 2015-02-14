@@ -4,7 +4,8 @@ class FeatureMap
     # to list all the supported features. Please use only boolean values.
     @hash = hash || {
       :email => true,     # global email notifications
-      :username => true  # additional user name; used to log in
+      :username => true,  # additional user name; used to log in
+      :activity => true   # activity/history on users/sparks
     }
   end
   
