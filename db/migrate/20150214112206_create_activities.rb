@@ -1,7 +1,7 @@
 class CreateActivities < ActiveRecord::Migration
   def change
     create_table :activities do |t|
-      t.string :key # see activity model
+      t.string :key, null: false # see activity model
       # used for finding activities by user/idea
       t.integer :source_id, null: false
       t.string :source_type, null: false
