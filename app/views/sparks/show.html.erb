@@ -7,9 +7,11 @@
 <br />
 <%= link_to 'Edit', edit_spark_path(@spark) if !current_user.nil? && current_user.can_edit?(@spark) %>
 
-<h2>Recent Activity</h2>
-<ul>
-<% @spark.activities.each do |a| %>
-  <li><%= render :partial => '/activities/activity', :locals => { :activity => a } %></li>
+<% if Rails.application.config.feature_map.enabled?(:activity) %>
+  <h2>Recent Activity</h2>
+  <ul>
+  <% @spark.activities.each do |a| %>
+    <li><%= render :partial => '/activities/activity', :locals => { :activity => a } %></li>
+  <% end %>
+  </ul>
 <% end %>
-</ul>

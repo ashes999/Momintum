@@ -55,11 +55,20 @@ class User < ActiveRecord::Base
   end
   
   # Name shown in the activity partial
+  # Also a safe name to show in general (eg. email vs. username)
   def activity_name
     if Rails.application.config.feature_map.enabled?(:username)
       return self.username
     else
       return self.email
+    end
+  end
+  
+  if Rails.application.config.feature_map.enabled?(:activity)
+    def activities
+      to_return = Activity.where('(source_type = "user" AND source_id = :id) OR (target_type = "user" AND target_id = :id)', { :id => self.id })
+        .order(:created_at => :desc)
+      return to_return
     end
   end
 end

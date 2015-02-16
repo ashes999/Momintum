@@ -1,2 +1,11 @@
 <h1><%= @user.activity_name %>'s profile</h1>
-Email: <%= @user.email %>
+<p>Email: <%= @user.email %></p>
+
+<% if Rails.application.config.feature_map.enabled?(:activity) %>
+  <h2>Recent Activity</h2>
+  <ul>
+  <% @user.activities.each do |a| %>
+    <li><%= render :partial => '/activities/activity', :locals => { :activity => a } %></li>
+  <% end %>
+  </ul>
+<% end %>
