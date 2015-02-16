@@ -77,4 +77,24 @@ class SparksControllerTest < ActionController::TestCase
     assert_equal('updated summary', s.summary)
     assert_equal('updated description', s.description)
   end
+  
+  test "creating a spark creates an activity for that user and spark" do
+    sign_in(@user)
+    post :create, :spark => {name: 'activity test 1', summary: 'test spark', description: 'hi', owner_id: @user.id }
+    s = Spark.find_by(:name => 'activity test 1')
+    assert_not_nil(s)
+    assert_equal(1, s.activities.count)
+    
+    activity = s.activities.first
+    assert_not_nil(activity)
+    assert_equal('created_spark', activity.key)
+  end
+  
+  test "editing a spark creates an activity for that user and spark" do
+    s = Spark.create(name: 'activity test 1', summary: 'test spark', description: 'hi', owner_id: @user.id)
+    sign_in(@user)
+    patch :update, { :id => s.id, :spark => { :name => s.name, :summary => s.summary, :description => 'updated description' }}
+    activity = s.activities.find_by(:key => 'updated_spark')
+    assert_not_nil(activity)
+  end
 end

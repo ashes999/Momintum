@@ -10,12 +10,18 @@ class SparksController < ApplicationController
 
   def create
     @spark = Spark.new
-    create_or_update()
+    if (create_or_update() == true)
+      Activity.create(:key => :created_spark, :source_id => current_user.id, :source_type => :user,
+        :target_id => @spark.id, :target_type => :spark)
+    end
   end
   
   def update
     @spark = Spark.find(params[:id])
-    create_or_update()
+    if (create_or_update() == true)
+      Activity.create(:key => :updated_spark, :source_id => current_user.id, :source_type => :user,
+        :target_id => @spark.id, :target_type => :spark)
+    end
   end
   
   def index
@@ -54,8 +60,10 @@ class SparksController < ApplicationController
     if @spark.valid?
       @spark.save
       redirect_to @spark
+      return true
     else
       render :action => 'edit'
+      return false
     end
   end
 end

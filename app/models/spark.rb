@@ -19,8 +19,11 @@ class Spark < ActiveRecord::Base
     return self.name
   end
   
-  def activities
-    to_return = Activity.where('(source_type = "spark" AND source_id = :id) OR (target_type = "spark" AND target_id = :id)',
-      { :id => self.id })
+  if Rails.application.config.feature_map.enabled?(:activity)
+    def activities
+      to_return = Activity.where('(source_type = "spark" AND source_id = :id) OR (target_type = "spark" AND target_id = :id)', { :id => self.id })
+        .order(:created_at => :desc)
+      return to_return
+    end
   end
 end
