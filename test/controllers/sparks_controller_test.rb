@@ -83,10 +83,15 @@ class SparksControllerTest < ActionController::TestCase
     post :create, :spark => {name: 'activity test 1', summary: 'test spark', description: 'hi', owner_id: @user.id }
     s = Spark.find_by(:name => 'activity test 1')
     assert_not_nil(s)
-    assert_equal(1, s.activities.count)
     
+    # spark activity
+    assert_equal(1, s.activities.count)
     activity = s.activities.first
     assert_not_nil(activity)
+    assert_equal('created_spark', activity.key)
+    
+    # user activity
+    activity = @user.activities.find_by(:source_id => @user.id, :source_type => :user, :target_id => s.id, :target_type => :spark)
     assert_equal('created_spark', activity.key)
   end
   
@@ -94,7 +99,13 @@ class SparksControllerTest < ActionController::TestCase
     s = Spark.create(name: 'activity test 1', summary: 'test spark', description: 'hi', owner_id: @user.id)
     sign_in(@user)
     patch :update, { :id => s.id, :spark => { :name => s.name, :summary => s.summary, :description => 'updated description' }}
+    
+    # spark activity
     activity = s.activities.find_by(:key => 'updated_spark')
+    assert_not_nil(activity)
+    
+    # user activity
+    activity = @user.activities.find_by(:source_id => @user.id, :source_type => :user, :target_id => s.id, :target_type => :spark, :key => :updated_spark)
     assert_not_nil(activity)
   end
 end
