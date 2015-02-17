@@ -4,7 +4,8 @@ if Rails.application.config.feature_map.enabled?(:activity)
     
     @@keys = {
       'created_spark' => '{0} created the spark {1}',
-      'updated_spark' => '{0} updated the spark {1}'
+      'updated_spark' => '{0} updated the spark {1}',
+      'likes_spark'   => '{0} likes the spark {1}'
     }
     
     # validation fails if these values are symbols, but passes when they're strings

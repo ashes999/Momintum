@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
-  get 'users/index'
-
-  get 'users/show'
-
+  
   root  'static_pages#home'
   get   'about'     => 'static_pages#about'
   get   'contact'   => 'static_pages#contact'
@@ -14,6 +11,11 @@ Rails.application.routes.draw do
 
   resources :sparks, :users
 
+  post 'likes/like'
+  delete 'likes/dislike'
+
+  get 'users/index'
+  get 'users/show'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
