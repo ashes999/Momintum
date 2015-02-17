@@ -11,3 +11,9 @@ You may wish to look at:
 Please make sure you define the following:
 
 - `ENV['admin_email']` for the admin dashboard
+
+# Main Reasons to Switch to Rails
+
+- Trade for a high-velocity dev stack (+ dynamic languages in general)
+- More mature web decelopment framework and ecosystem
+- More scalable hosting (Heroku)
