@@ -3,9 +3,10 @@ class FeatureMap
     # Not necessary (empty values indicate it's enabled), but this is a good place
     # to list all the supported features. Please use only boolean values.
     @hash = hash || {
-      :email => true,     # global email notifications
-      :username => true,  # additional user name; used to log in
-      :activity => true   # activity/history on users/sparks
+      :email => true,       # global email notifications
+      :username => true,    # additional user name; used to log in
+      :activity => true,    # activity/history on users/sparks
+      :like_sparks => true  # users can like sparks
     }
   end
   

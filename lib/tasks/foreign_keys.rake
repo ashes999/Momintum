@@ -1,7 +1,11 @@
 namespace :db do
   desc "Checks for any violations of (non-DB-existant) foreign key constraints"
   task check_foreign_keys: :environment do
-    ### Spark.owner_id references User.id
+    
+    # TODO: figure out how to generalize this if possible
+    ### Spark.owner_id references User.id (below)
+    # Activities: check user_id or spark_id appropriately (source/target)
+    # Likes: user id and spark id
     results = ''
     count = 0
     users = User.all

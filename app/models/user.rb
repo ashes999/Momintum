@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
   before_save { self.email = email.downcase }
 
   has_many :sparks, :foreign_key => 'owner_id', :dependent => :nullify
+  
+  if Rails.application.config.feature_map.enabled?(:like_sparks)
+    has_many :likes
+  end
 
   validates :email,
     :presence => true,
