@@ -51,5 +51,22 @@ class LikesControllerTest < ActionController::TestCase
     assert_response :redirect
     assert_equal(base_count, Like.count)
   end
+  
+  test "user can't like their own spark" do
+    u = User.new(:username => :test, :password => :password, :email => 'test@test.com')
+    u.skip_confirmation!
+    u.save
+    
+    s = Spark.create(:name => 'TBD', :summary => 'TBD', :description => 'TBD', :owner_id => u.id)
+    
+    sign_in(u)
+    post :like, {:user_id => u.id, :spark_id => s.id}
+    
+    # Didn't work: 0 likes, flash message
+    l = u.likes
+    assert_equal(0, l.count)
+    assert(flash[:alert].include?('can\'t like'))
+  end
+  
 
 end
