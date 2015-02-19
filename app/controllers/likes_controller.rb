@@ -16,7 +16,13 @@ if Rails.application.config.feature_map.enabled?(:like_sparks)
         Activity.create(:key => :likes_spark, :source_type => :user, :source_id => user_id, 
           :target_type => :spark, :target_id => spark_id) if Rails.application.config.feature_map.enabled?(:activity)
       end
-      redirect_to Spark.find(spark_id)
+      #redirect_to Spark.find(spark_id)
+      
+      respond_to do |format|
+        format.html { redirect_to Spark.find(spark_id), :notice => 'You have liked this spark.' }
+        format.json { render json: @spark }
+        format.js
+      end
     end
     
     def dislike
@@ -25,7 +31,7 @@ if Rails.application.config.feature_map.enabled?(:like_sparks)
       l = Like.find_by(:user_id => params[:user_id], :spark_id => params[:spark_id])
       l.destroy unless l.nil?
       
-      redirect_to Spark.find(params[:spark_id])
+      #redirect_to Spark.find(params[:spark_id])
     end
   end
 end
