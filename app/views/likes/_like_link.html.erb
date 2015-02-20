@@ -1,0 +1,1 @@
+<%= link_to 'Like', { :controller => 'likes', :action => 'like', :user_id => current_user.id, :spark_id => @spark.id }, :method => :post, :remote => true, :id => 'like_link' %>

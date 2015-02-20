@@ -2,9 +2,9 @@
 
 <% if !current_user.nil? && current_user.id != @spark.owner_id  %>
   <% if Like.find_by(:user_id => current_user.id, :spark_id => @spark.id).nil? %>
-    <%= link_to 'Like', { :controller => 'likes', :action => 'like', :user_id => current_user.id, :spark_id => @spark.id }, :method => :post, :remote => true, :id => 'like_link' %>
+    <%= render :partial => '/likes/like_link', :locals => { :spark => @spark } %>
   <% else %>
-    <%= link_to 'Disike', { :controller => 'likes', :action => 'dislike', :user_id => current_user.id, :spark_id => @spark.id }, :method => :delete, :remote => true, :id => 'like_link' %>
+    <%= render :partial => '/likes/dislike_link', :locals => { :spark => @spark } %>
   <% end %>
 <% end %>
 
