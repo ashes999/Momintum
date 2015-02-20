@@ -1,0 +1,1 @@
+<%= link_to 'Disike', { :controller => 'likes', :action => 'dislike', :user_id => current_user.id, :spark_id => @spark.id }, :method => :delete, :remote => true, :id => 'like_link' %>

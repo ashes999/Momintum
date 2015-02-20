@@ -1,4 +1,13 @@
 <h1><%= @spark.name %></h1>
+
+<% if !current_user.nil? && current_user.id != @spark.owner_id  %>
+  <% if Like.find_by(:user_id => current_user.id, :spark_id => @spark.id).nil? %>
+    <%= render :partial => '/likes/like_link', :locals => { :spark => @spark } %>
+  <% else %>
+    <%= render :partial => '/likes/dislike_link', :locals => { :spark => @spark } %>
+  <% end %>
+<% end %>
+
 <p><strong>Name:</strong> <%= @spark.name %></p>
 <p><strong>Summary:</strong> <%= @spark.summary %></p>
 <p><strong>Description:</strong></p>

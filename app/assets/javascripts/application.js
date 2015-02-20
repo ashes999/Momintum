@@ -13,4 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require noty-2.3.4/jquery.noty.packaged
+//= require noty-2.3.4/layouts/top
+//= require noty-2.3.4/themes/default
 //= require_tree .
