@@ -1,19 +1,24 @@
-<h1><%= @spark.name %></h1>
-
-<% if !current_user.nil? && current_user.id != @spark.owner_id  %>
-  <% if Like.find_by(:user_id => current_user.id, :spark_id => @spark.id).nil? %>
-    <%= render :partial => '/likes/like_link', :locals => { :spark => @spark } %>
-  <% else %>
-    <%= render :partial => '/likes/dislike_link', :locals => { :spark => @spark } %>
-  <% end %>
-<% end %>
+<h2><%= @spark.name %></h2>
 
 <p><strong>Name:</strong> <%= @spark.name %></p>
 <p><strong>Summary:</strong> <%= @spark.summary %></p>
+
+<p><strong>Likes:</strong> <%= @spark.likes.count %> likes |
+
+<% if current_user.nil? %>
+  <a href="" onclick='alert("You must be logged in to like this spark.");'/>Like</a>
+<% elsif !current_user.nil? && current_user.id != @spark.owner_id  %>
+  <% if Like.find_by(:user_id => current_user.id, :spark_id => @spark.id).nil? %>
+    <%= link_to 'Like', { :controller => 'likes', :action => 'like', :user_id => current_user.id, :spark_id => @spark.id }, :method => :post, :remote => true, :id => 'like_link' %>
+  <% else %>
+    <%= link_to 'Disike', { :controller => 'likes', :action => 'dislike', :user_id => current_user.id, :spark_id => @spark.id }, :method => :delete, :remote => true, :id => 'like_link' %>
+  <% end %>
+<% end %></p>
+
 <p><strong>Description:</strong></p>
 <%= @spark.description %>
-
 <br />
+
 <%= link_to 'Edit', edit_spark_path(@spark) if !current_user.nil? && current_user.can_edit?(@spark) %>
 
 <% if Rails.application.config.feature_map.enabled?(:activity) %>
