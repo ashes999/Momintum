@@ -1,3 +1,4 @@
+# Usage: if Rails.application.config.feature_map.enabled?(:email) ...
 class FeatureMap
   def initialize(hash = nil)
     # Not necessary (empty values indicate it's enabled), but this is a good place
@@ -8,6 +9,7 @@ class FeatureMap
       :activity => true,    # activity/history on users/sparks
       :like_sparks => true  # users can like sparks
     }
+    
   end
   
   def enabled?(feature)
