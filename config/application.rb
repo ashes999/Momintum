@@ -22,7 +22,13 @@ module Workspace
     
     config.autoload_paths += %W(#{config.root}/lib)
     
+    # Feature map: what features are enabled?
     require "#{config.root}/lib/feature_map"
     config.feature_map = FeatureMap.new
+    
+    # Markdown config. This object should be instantiated once, not per request.
+    # Hence, it's here.
+    config.markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML,
+      {:autolink => true, :space_after_headers => true, :quote => true })
   end
 end
