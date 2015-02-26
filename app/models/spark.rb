@@ -28,7 +28,7 @@ class Spark < ActiveRecord::Base
     end
   end
   
-  if Rails.application.config.feature_map.enabled?(:like_sparks)
+  if Rails.application.config.feature_map.enabled?(:spark_likes)
     has_many :likes
   end
 end

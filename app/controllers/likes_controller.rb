@@ -1,4 +1,4 @@
-if Rails.application.config.feature_map.enabled?(:like_sparks)
+if Rails.application.config.feature_map.enabled?(:spark_likes)
   class LikesController < ApplicationController
     before_filter :authenticate_user!
     

@@ -7,7 +7,7 @@ class FeatureMap
       :email => true,       # global email notifications
       :username => true,    # additional user name; used to log in
       :activity => true,    # activity/history on users/sparks
-      :like_sparks => true  # users can like sparks
+      :spark_likes => true  # users can like sparks
     }
     
   end

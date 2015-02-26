@@ -3,7 +3,7 @@
 <p><strong>Name:</strong> <%= @spark.name %></p>
 <p><strong>Summary:</strong> <%= @spark.summary %></p>
 
-<% if Rails.application.config.feature_map.enabled?(:like_sparks) %>
+<% if Rails.application.config.feature_map.enabled?(:spark_likes) %>
   <p><strong>Likes:</strong> <%= @spark.likes.count %> likes
   
   <% if current_user.nil? %>

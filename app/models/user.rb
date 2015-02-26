@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 
   has_many :sparks, :foreign_key => 'owner_id', :dependent => :nullify
   
-  if Rails.application.config.feature_map.enabled?(:like_sparks)
+  if Rails.application.config.feature_map.enabled?(:spark_likes)
     has_many :likes
   end
 
