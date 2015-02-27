@@ -4,7 +4,7 @@
 <p><strong>Summary:</strong> <%= @spark.summary %></p>
 
 <% if Rails.application.config.feature_map.enabled?(:spark_likes) %>
-  <p><strong>Likes:</strong> <%= @spark.likes.count %> likes
+  <p><strong>Likes:</strong> <span id='num_likes'><%= @spark.likes.count %></span> likes
   
   <% if current_user.nil? %>
     | <a href="" onclick='alert("You must be logged in to like this spark.");'/>Like</a>

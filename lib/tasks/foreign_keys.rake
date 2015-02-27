@@ -6,6 +6,7 @@ namespace :db do
     ### Spark.owner_id references User.id (below)
     # Activities: check user_id or spark_id appropriately (source/target)
     # Likes: user id and spark id
+    # Follows: user id and target id
     results = ''
     count = 0
     users = User.all

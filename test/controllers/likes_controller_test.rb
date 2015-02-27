@@ -47,7 +47,7 @@ class LikesControllerTest < ActionController::TestCase
     assert_equal(base_count + 1, Like.count)
     
     sign_in(u)
-    get :dislike, { :user_id => u.id, :spark_id => s.id }
+    delete :dislike, { :user_id => u.id, :spark_id => s.id }
     assert_response :redirect
     assert_equal(base_count, Like.count)
   end

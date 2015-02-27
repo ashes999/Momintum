@@ -1,4 +1,4 @@
-class CreateLikes < ActiveRecord::Migration
+class CreateUserLikesSpark < ActiveRecord::Migration
   def change
     create_table :likes do |t|
       t.integer :user_id, null: false

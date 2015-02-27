@@ -1,1 +1,2 @@
 $('#like_link').replaceWith('<%= render :partial => '/likes/like_link', :locals => { :spark => @spark } %>');
+$('#num_likes').text('<%= @spark.likes.count %>');
