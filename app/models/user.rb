@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   end
   
   def is_owner?(spark)
-    return !spark.is_ownerless? && !spark.owner_id.nil? && self.id == spark.owner.id
+    return !spark.ownerless? && !spark.owner_id.nil? && self.id == spark.owner.id
   end
   
   def is_on_team?(spark)
@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
   end
   
   def can_edit?(spark)
-    return !spark.is_ownerless? && (self.is_owner?(spark) || self.is_on_team?(spark))
+    return !spark.ownerless? && (self.is_owner?(spark) || self.is_on_team?(spark))
   end
   
   # Name shown in the activity partial

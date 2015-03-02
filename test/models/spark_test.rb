@@ -5,7 +5,7 @@ class SparkTest < ActiveSupport::TestCase
   def reset_spark
     @spark = Spark.new(:name => 'Test Spark', :summary => 'For testing only', :description => 'TBD')
     
-    @user = User.new(:username => 'test', :email => 'test.user@test.com', :password => 'test1234')
+    @user = User.new(:username => 'test', :email => 'test.user@test.com', :password => :password)
     @user.skip_confirmation! # skip emails if/when saved (eg. validation tests)
     @user.save
   end
@@ -29,70 +29,55 @@ class SparkTest < ActiveSupport::TestCase
   end
   
   test "spark names must be unique" do
-    s1 = Spark.create(:name => @spark.name, :summary => 'A copy-cat', :description => 'Testing', :owner_id => @user.id)
-    
-    begin
-      assert_not(@spark.valid?)
-    rescue
-      s1.delete
-    end
+    Spark.create(:name => @spark.name, :summary => 'A copy-cat', :description => 'Testing', :owner_id => @user.id)
+    assert_not(@spark.valid?)
   end
   
   test "user owns sparks" do
-    begin
-      user = User.new(:username => 'test', :email => 'test.user@test.com', :password => :password)
-      user.skip_confirmation!
-      user.save
-      
-      user2 = User.new(:username => 'test2', :email => 'test.user@test.com', :password => :password)
-      user2.skip_confirmation!
-      user2.save
-      
-      
-      s1 = Spark.new(:name => 'Spark #1', :summary => 'Testing', :description => 'TBD', :owner_id => user.id)
-      s1.save
-      
-      s2 = Spark.new(:name => 'Spark #2', :summary => 'Testing', :description => 'TBD', :owner_id => user2.id)
-      s2.save
-      
-      # Ensure collections in-memory are up-to-date
-      user.sparks.reload
-      user2.sparks.reload
-      
-      assert(user.sparks.include?(s1))
-      assert_not(user.sparks.include?(s2))
-      
-      assert_not(user2.sparks.include?(s1))
-      assert(user2.sparks.include?(s2))
-    ensure
-      user.delete unless user.nil?
-      user2.delete unless user2.nil?
-      s1.delete unless s1.nil?
-      s2.delete unless s2.nil?
-    end
+
+    user = User.new(:username => 'test2', :email => 'test.one@test.com', :password => :password)
+    user.skip_confirmation!
+    user.save
+    
+    user2 = User.new(:username => 'test3', :email => 'test.two@test.com', :password => :password)
+    user2.skip_confirmation!
+    user2.save
+    
+    s1 = Spark.new(:name => 'Spark #1', :summary => 'Testing', :description => 'TBD', :owner_id => user.id)
+    assert s1.save
+    
+    s2 = Spark.new(:name => 'Spark #2', :summary => 'Testing', :description => 'TBD', :owner_id => user2.id)
+    assert s2.save
+    
+    # Ensure collections in-memory are up-to-date
+    user.sparks.reload
+    user2.sparks.reload
+    
+    assert(user.sparks.include?(s1))
+    assert_not(user.sparks.include?(s2))
+    
+    assert_not(user2.sparks.include?(s1))
+    assert(user2.sparks.include?(s2))
+    
   end
   
-  test "deleting a user deletes their sparks" do
-    begin
-      user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
-      user.skip_confirmation!
-      user.save
-      
-      spark = Spark.create(:name => 'Test spark', :summary => 'User deletion test', :description => 'TBA', :owner_id => user.id)
-      id = spark.id
-      user.delete
-      assert_nil Spark.find_by_id(id)
-    ensure
-      user.delete unless user.nil?
-      spark.delete unless spark.nil?
-    end
+  test "deleting a user makes their sparks ownerless" do
+    user = User.new(:username => 'test2', :email => 'test.user@test.com', :password => :password)
+    user.skip_confirmation!
+    user.save
+    
+    spark = Spark.create(:name => 'Test spark', :summary => 'User deletion test', :description => 'TBA', :owner_id => user.id)
+    id = spark.id
+    user.delete
+    s = Spark.find(id)
+    assert s.ownerless?
   end
   
-  test "is_ownerless? returns true if owner_id is nil" do
+  test "ownerless? returns true if owner_id is nil" do
     s = Spark.new(:name => 'One', :summary => 'Two', :description => 'Three')
-    assert(s.is_ownerless?)
+    assert(s.ownerless?)
     
     s.owner = @user
-    assert_not(s.is_ownerless?)
+    assert_not(s.ownerless?)
   end
 end

@@ -42,22 +42,14 @@ class UserTest < ActiveSupport::TestCase
     assert(@user.valid?)
     @user.save
     clone = User.new(:email => @user.email.upcase, :password => 'password', :username => @user.username)
-    begin
-      assert_not(clone.valid?)
-    ensure
-      @user.delete
-    end
+    assert_not(clone.valid?)
   end
   
   test "usernames must be unique (regardless of case)" do
     assert(@user.valid?)
     @user.save
     clone = User.new(:email => 'test.two@test.com', :password => 'password', :username => @user.username.upcase)
-    begin
-      assert_not(clone.valid?)
-    ensure
-      @user.delete
-    end
+    assert_not(clone.valid?)
   end
   
   test "users with an empty username are not valid" do
