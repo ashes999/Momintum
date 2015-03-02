@@ -18,7 +18,6 @@ if Rails.application.config.feature_map.enabled?(:spark_likes)
       end
       
       @spark = Spark.find(spark_id)
-      
       respond_to do |format|
         format.html { redirect_to Spark.find(spark_id) }
         format.json { render json: @spark }

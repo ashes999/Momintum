@@ -39,18 +39,20 @@ class SparkTest < ActiveSupport::TestCase
   end
   
   test "user owns sparks" do
-    user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
-    user.skip_confirmation! # skip emails if/when saved (eg. validation tests)
-    user.save
-    
     begin
-      user2 = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
-      user2.skip_confirmation! # skip emails if/when saved (eg. validation tests)
+      user = User.new(:username => 'test', :email => 'test.user@test.com', :password => :password)
+      user.skip_confirmation!
+      user.save
       
-      s1 = Spark.new(:name => 'Spark #1', :summary => 'Testing', :description => 'TBD', :user_id => user.id)
+      user2 = User.new(:username => 'test2', :email => 'test.user@test.com', :password => :password)
+      user2.skip_confirmation!
+      user2.save
+      
+      
+      s1 = Spark.new(:name => 'Spark #1', :summary => 'Testing', :description => 'TBD', :owner_id => user.id)
       s1.save
       
-      s2 = Spark.new(:name => 'Spark #2', :summary => 'Testing', :description => 'TBD', :user_id => user2.id)
+      s2 = Spark.new(:name => 'Spark #2', :summary => 'Testing', :description => 'TBD', :owner_id => user2.id)
       s2.save
       
       # Ensure collections in-memory are up-to-date
@@ -62,8 +64,8 @@ class SparkTest < ActiveSupport::TestCase
       
       assert_not(user2.sparks.include?(s1))
       assert(user2.sparks.include?(s2))
-    rescue
-      user.delete
+    ensure
+      user.delete unless user.nil?
       user2.delete unless user2.nil?
       s1.delete unless s1.nil?
       s2.delete unless s2.nil?
@@ -71,17 +73,17 @@ class SparkTest < ActiveSupport::TestCase
   end
   
   test "deleting a user deletes their sparks" do
-    user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
-    user.skip_confirmation! # skip emails if/when saved (eg. validation tests)
-    user.save
-    
     begin
-      spark = Spark.create(:name => 'Test spark', :summary => 'User deletion test', :description => 'TBA', owner_id => user.id)
+      user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
+      user.skip_confirmation!
+      user.save
+      
+      spark = Spark.create(:name => 'Test spark', :summary => 'User deletion test', :description => 'TBA', :owner_id => user.id)
       id = spark.id
       user.delete
-      assert(Spark.find_by_id(id).nil?)
-    rescue
-      user.delete unless user.nil? || User.find_by_id(user.id).nil?
+      assert_nil Spark.find_by_id(id)
+    ensure
+      user.delete unless user.nil?
       spark.delete unless spark.nil?
     end
   end

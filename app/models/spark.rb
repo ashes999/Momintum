@@ -8,7 +8,7 @@ class Spark < ActiveRecord::Base
   
   validates_presence_of :summary, :description
   
-  belongs_to :owner,  :class_name => :User, :foreign_key => 'owner_id' 
+  belongs_to :owner, :class_name => :User, :foreign_key => 'owner_id' 
   
   def is_ownerless?
     return self.owner_id.nil? || self.owner.nil?

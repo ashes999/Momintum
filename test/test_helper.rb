@@ -10,5 +10,6 @@ class ActiveSupport::TestCase
 end
 
 class ActionController::TestCase
+  # Source of the sign_in method
   include Devise::TestHelpers
 end

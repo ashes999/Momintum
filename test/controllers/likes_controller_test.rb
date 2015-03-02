@@ -2,7 +2,6 @@ require 'test_helper'
 
 class LikesControllerTest < ActionController::TestCase
   test "like creates like for user and spark" do
-    base_count = Like.count
     u = User.new(:username => :test, :password => :password, :email => 'test@test.com')
     u.skip_confirmation!
     u.save
@@ -11,9 +10,12 @@ class LikesControllerTest < ActionController::TestCase
     
     sign_in(u)
     
-    post :like, {:user_id => u.id, :spark_id => s.id}
+    assert_difference 'Like.count', +1 do
+      post :like, {:user_id => u.id, :spark_id => s.id}
+    end
+    
     assert_response :redirect
-    assert_equal(base_count + 1, Like.count)
+    
     u.reload
     s.reload
     
@@ -35,37 +37,46 @@ class LikesControllerTest < ActionController::TestCase
   end
   
   test "dislike deletes like" do
-    # We don't test the like :post method
-    base_count = Like.count
-    u = User.new(:username => :test, :password => :password, :email => 'test@test.com')
-    u.skip_confirmation!
-    u.save
+    begin
+      u = User.new(:username => :test, :password => :password, :email => 'test@test.com')
+      u.skip_confirmation!
+      u.save
     
-    s = Spark.create(:name => 'TBD', :summary => 'TBD', :description => 'TBD')
-    
-    Like.create(:user_id => u.id, :spark_id => s.id)
-    assert_equal(base_count + 1, Like.count)
-    
-    sign_in(u)
-    delete :dislike, { :user_id => u.id, :spark_id => s.id }
-    assert_response :redirect
-    assert_equal(base_count, Like.count)
+      s = Spark.create(:name => 'TBD', :summary => 'TBD', :description => 'TBD')
+      Like.create(:user_id => u.id, :spark_id => s.id)
+
+      sign_in(u)
+
+      assert_difference 'Like.count', -1 do
+        delete :dislike, { :user_id => u.id, :spark_id => s.id }
+      end
+      
+      assert_response :redirect
+    ensure
+      u.delete
+      s.delete
+    end
   end
   
   test "user can't like their own spark" do
-    u = User.new(:username => :test, :password => :password, :email => 'test@test.com')
-    u.skip_confirmation!
-    u.save
-    
-    s = Spark.create(:name => 'TBD', :summary => 'TBD', :description => 'TBD', :owner_id => u.id)
-    
-    sign_in(u)
-    post :like, {:user_id => u.id, :spark_id => s.id}
-    
-    # Didn't work: 0 likes, flash message
-    l = u.likes
-    assert_equal(0, l.count)
-    assert(flash[:alert].include?('can\'t like'))
+    begin
+      u = User.new(:username => :test, :password => :password, :email => 'test@test.com')
+      u.skip_confirmation!
+      u.save
+      
+      s = Spark.create(:name => 'TBD', :summary => 'TBD', :description => 'TBD', :owner_id => u.id)
+      
+      sign_in(u)
+      post :like, {:user_id => u.id, :spark_id => s.id}
+      
+      # Didn't work: 0 likes, flash message
+      l = u.likes
+      assert_equal(0, l.count)
+      assert(flash[:alert].include?('can\'t like'))
+    ensure
+      u.delete
+      s.delete
+    end
   end
   
 
