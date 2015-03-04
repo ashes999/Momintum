@@ -54,27 +54,22 @@ class SparksController < ApplicationController
     @spark.name = fields[:name]
     @spark.summary = fields[:summary]
     @spark.description = fields[:description]
+    spark_id = params[:id]
     
-    operation = fields[:id].nil? ? :create : :edit
+    operation = spark_id.nil? ? :create : :update
     # Don't update owner on edit
     @spark.owner_id = fields[:owner_id].to_i unless fields[:owner_id].nil?
     
     if @spark.valid?
+      updated_description = Spark.find(spark_id).description != @spark.description unless spark_id.nil?
       @spark.save
       
-      if Rails.application.config.feature_map.enabled?(:user_follows)
+      if Rails.application.config.feature_map.enabled?(:follow_users)
         if operation == :create
-          subject = "New Spark: #{@spark.name}"
-          url = url_for :controller => 'sparks', :action => 'show', :id => @spark.id
-          owner_name = User.find(@spark.owner_id).username
-          body = "#{User.find(@spark.owner_id).username} created a new spark called '#{@spark.name}' on Momintum. You can view the details here: #{url}"
-          #puts "Email: #{subject}\n#{body}"
+          SparkMailer.spark_created(@spark).deliver_later
         elsif operation == :update
-          if Spark.find(fields[:id]).description != @spark.description
-            subject = "Updated Spark: #{@spark.name}"
-            url = url_for :controller => 'sparks', :action => 'show', :id => @spark.id
-            body = "#{User.find(@spark.owner_id).username} updated the spark called '#{@spark.name}' on Momintum. You can view the details here: #{url}"
-            #puts "Email: #{subject}\n#{body}"
+          if updated_description
+            SparkMailer.spark_updated(@spark).deliver_later
           end
         end
       end

@@ -8,7 +8,7 @@ class FeatureMap
       :username => true,    # additional user name; used to log in
       :activity => true,    # activity/history on users/sparks
       :spark_likes => true, # users can like sparks
-      :user_follows => true # users can follow other users
+      :follow_users => true # users can follow other users
     }
     
   end

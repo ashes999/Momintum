@@ -118,19 +118,20 @@ class SparksControllerTest < ActionController::TestCase
     follower = create_user(:username => 'follower')
     Follow.create(:follower_id => follower.id, :target_id => owner.id)
     
+    name = 'follow test new spark'
+    sign_in(owner)
     assert_difference 'ActionMailer::Base.deliveries.size', +1 do
-      old_count = Spark.count
-      sign_in(owner)
-      post :create, :spark => {name: 'follow test new spark', summary: 'test spark', description: 'hi', owner_id: owner.id }
-      assert_equal old_count + 1, Spark.count
+      post :create, :spark => {name: name, summary: 'test spark', description: 'hi', owner_id: owner.id }
     end
+    
+    spark = Spark.last
     
     follow_email = ActionMailer::Base.deliveries.last
     assert_match "New Spark", follow_email.subject
-    assert_match spark.name, follow_email.body
-    assert_match 'new spark', follow_email.body
+    assert_match spark.name, follow_email.body.to_s
+    assert_match 'new spark', follow_email.body.to_s
   end
-=begin
+  
   test "updating a spark description emails followers" do
     owner = create_user(:username => 'owner')
     follower = create_user(:username => 'follower')
@@ -144,16 +145,16 @@ class SparksControllerTest < ActionController::TestCase
       spark.save
     end
     
+    sign_in(owner)
     assert_difference 'ActionMailer::Base.deliveries.size', +1 do
-      spark.description = 'Updated description'
-      spark.save
+      patch :update, { :id => spark.id, :spark => { :name => spark.name, :summary => spark.summary, :description => "Updated on #{Time.new}" }}
     end
     
     follow_email = ActionMailer::Base.deliveries.last
     assert_match "Updated Spark", follow_email.subject
-    assert_match spark.name, follow_email.body
+    assert_match spark.name, follow_email.body.to_s
+    assert_match 'updated', follow_email.body.to_s
   end
-=end  
   
   ### End of "Follow" tests
 end

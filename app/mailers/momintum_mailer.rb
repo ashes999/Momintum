@@ -1,11 +1,10 @@
 # inspired by https://github.com/plataformatec/devise/wiki/How-To:-Use-custom-mailer
 class MomintumMailer < Devise::Mailer   
-  helper :application # gives access to all helpers defined within `application_helper`.
   include Devise::Controllers::UrlHelpers # Optional. eg. `confirmation_url`
-  default template_path: 'mailers/devise' # changed from devise/mailers
+  #default template_path: 'mailers/devise' # changed from devise/mailers
   default from: Devise.mailer_sender
   
-  def send_test_email()
+  def test_email
     raise 'ADMIN_EMAIL environment variable not set' if ENV['ADMIN_EMAIL'].nil?
     raise 'TEST_ACCOUNT environment variable not set' if ENV['TEST_ACCOUNT'].nil?
     raise 'Devise.mailer_sender not set' if Devise.mailer_sender.nil?
@@ -16,6 +15,6 @@ class MomintumMailer < Devise::Mailer
     u.delete
     
     # Send a separate email to the admin
-    mail(:to => ENV['ADMIN_EMAIL'], :subject => 'Momintum Test Email', :body => "This is a test email sent from #{root_url}").deliver
+    mail(:to => ENV['ADMIN_EMAIL'], :subject => 'Momintum Test Email').deliver_now
   end
 end
