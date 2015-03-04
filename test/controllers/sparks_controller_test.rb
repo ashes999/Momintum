@@ -6,7 +6,9 @@ class SparksControllerTest < ActionController::TestCase
     @user = User.new(:username => 'test', :email => 'test@test.com', :password => 'password')
     @user.skip_confirmation!
     @user.save
+    assert @user.valid?, "Failed to create user: #{@user.errors.messages}"
     @spark = Spark.create(:name => 'controller test', :description => 'test spark', :summary => 'test')
+    assert @spark.valid?, "Failed to create spark: #{@spark.errors.messages}"
   end
   
   test "index has sparks" do
@@ -108,4 +110,50 @@ class SparksControllerTest < ActionController::TestCase
     activity = @user.activities.find_by(:source_id => @user.id, :source_type => :user, :target_id => s.id, :target_type => :spark, :key => :updated_spark)
     assert_not_nil(activity)
   end
+  
+  ### "Follow" tests
+  
+  test "creating a new spark emails followers" do
+    owner = create_user(:username => 'owner')
+    follower = create_user(:username => 'follower')
+    Follow.create(:follower_id => follower.id, :target_id => owner.id)
+    
+    assert_difference 'ActionMailer::Base.deliveries.size', +1 do
+      old_count = Spark.count
+      sign_in(owner)
+      post :create, :spark => {name: 'follow test new spark', summary: 'test spark', description: 'hi', owner_id: owner.id }
+      assert_equal old_count + 1, Spark.count
+    end
+    
+    follow_email = ActionMailer::Base.deliveries.last
+    assert_match "New Spark", follow_email.subject
+    assert_match spark.name, follow_email.body
+    assert_match 'new spark', follow_email.body
+  end
+=begin
+  test "updating a spark description emails followers" do
+    owner = create_user(:username => 'owner')
+    follower = create_user(:username => 'follower')
+    Follow.create(:follower_id => follower.id, :target_id => owner.id)
+    spark = create_spark(:name => 'spark 1', :owner_id => owner.id)
+    
+    # No description change? No email.
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      spark.summary = 'Changed Summary!'
+      spark.name = 'New Name!'
+      spark.save
+    end
+    
+    assert_difference 'ActionMailer::Base.deliveries.size', +1 do
+      spark.description = 'Updated description'
+      spark.save
+    end
+    
+    follow_email = ActionMailer::Base.deliveries.last
+    assert_match "Updated Spark", follow_email.subject
+    assert_match spark.name, follow_email.body
+  end
+=end  
+  
+  ### End of "Follow" tests
 end

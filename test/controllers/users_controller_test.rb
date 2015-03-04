@@ -14,15 +14,20 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
   end
   
-  test "following a user creates a follow" do
+  ###
+  # Authentication tests. These belong to Devise today; maybe something else tomorrow.
+  ###
+  
+  test "creating a new user generates a welcome/confirmation email" do
     assert_difference 'ActionMailer::Base.deliveries.size', +1 do
       u = User.create(:username => :alice, :password => :password, :email => 'alibhai.ashiq@gmail.com')
       u.destroy
     end
     
     invite_email = ActionMailer::Base.deliveries.last
- 
     assert_equal "Confirmation instructions", invite_email.subject
   end
+
+  ### End of authentication tests ###
 
 end

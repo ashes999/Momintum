@@ -46,10 +46,12 @@ class User < ActiveRecord::Base
     end
   end
   
+  # rename to owns?
   def is_owner?(spark)
     return !spark.ownerless? && !spark.owner_id.nil? && self.id == spark.owner.id
   end
   
+  # rename to on_team?
   def is_on_team?(spark)
     return false
   end
