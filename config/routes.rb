@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
   
   root  'static_pages#home'
-  get   'about'     => 'static_pages#about'
-  get   'contact'   => 'static_pages#contact'
-  get   'updates'   => 'static_pages#updates'
-  get   'register'  => 'users#sign_up'
-  get   'admin'     => 'admin#dashboard'
+  get   'about'           => 'static_pages#about'
+  get   'contact'         => 'static_pages#contact'
+  get   'updates'         => 'static_pages#updates'
+  get   'register'        => 'users#sign_up'
+  
+  get   'admin'           => 'admin#dashboard'
+  get   'reload_features' => 'admin#reload_features'
 
   devise_for :users
 

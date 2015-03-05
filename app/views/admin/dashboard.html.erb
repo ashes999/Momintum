@@ -12,9 +12,9 @@
   </ul>
 
   <h1>Feature Map</h1>
-  <% all_features = [:email, :username] %>
+  <%= link_to 'Reload Features', url_for(:controller => :admin, :action => :reload_features) %>
   <ul>
-    <% all_features.each do |feature| %>
+    <% Rails.application.config.feature_map.keys.each do |feature| %>
       <li><strong><%= feature %>:</strong> <%= Rails.application.config.feature_map.enabled?(feature) %></li>
     <% end %>
   </ul>

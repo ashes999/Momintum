@@ -1,16 +1,8 @@
 # Usage: if Rails.application.config.feature_map.enabled?(:email) ...
 class FeatureMap
-  def initialize(hash = nil)
-    # Not necessary (empty values indicate it's enabled), but this is a good place
-    # to list all the supported features. Please use only boolean values.
-    @hash = hash || {
-      :email => true,       # global email notifications
-      :username => true,    # additional user name; used to log in
-      :activity => true,    # activity/history on users/sparks
-      :spark_likes => true, # users can like sparks
-      :follow_users => true # users can follow other users
-    }
-    
+
+  def initialize
+    reload
   end
   
   def enabled?(feature)
@@ -18,5 +10,19 @@ class FeatureMap
     raise 'Specify feature' if feature.nil?
     return true if !@hash.include?(feature.to_sym)
     return @hash[feature.to_sym]
+  end
+  
+  # for convenience only (admin dashboard)
+  def keys
+    return @hash.keys
+  end
+  
+  def reload
+    map_path = 'config/feature_map.json'
+    # Load the file and strip out comments
+    contents = File.read(map_path)
+    contents = contents.gsub(/#.*$/, '')
+    # Convert to hash, preserving keys as symbols
+    @hash = JSON.parse(contents, symbolize_names: true)
   end
 end

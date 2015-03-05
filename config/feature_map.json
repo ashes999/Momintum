@@ -1,0 +1,9 @@
+# Comments are stripped out at runtime.
+
+{
+  "email": true,       # global email notifications
+  "username": true,    # additional user name; used to log in
+  "activity": true,    # activity/history on users/sparks
+  "spark_likes": true, # users can like sparks
+  "follow_users": true # users can follow other users
+}
