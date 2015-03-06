@@ -80,4 +80,35 @@ class SparkTest < ActiveSupport::TestCase
     s.owner = @user
     assert_not(s.ownerless?)
   end
+  
+  test "interested_parties includes all users who like a spark" do
+    u1 = create_user(:username => 'user1')
+    u2 = create_user(:username => 'user2')
+    u3 = create_user(:username => 'user3')
+    s = create_spark(:name => 'spark 1', :owner_id => u1.id)
+    
+    Like.create(:user_id => u2.id, :spark_id => s.id)
+    Like.create(:user_id => u3.id, :spark_id => s.id)
+    
+    s.reload
+    
+    assert(!s.interested_parties.include?(u1.email))
+    assert(s.interested_parties.include?(u2.email))
+    assert(s.interested_parties.include?(u3.email))
+  end
+  
+  test "interested_parties includes all users who follow the spark owner" do
+    u1 = create_user(:username => 'user1')
+    u2 = create_user(:username => 'user2')
+    u3 = create_user(:username => 'user3')
+    
+    Follow.create(:follower_id => u2.id, :target_id => u1.id)
+    Follow.create(:follower_id => u3.id, :target_id => u1.id)
+    
+    s = create_spark(:name => 'spark 1', :owner_id => u1.id)
+    
+    assert(!s.interested_parties.include?(u1.email))
+    assert(s.interested_parties.include?(u2.email))
+    assert(s.interested_parties.include?(u3.email))
+  end
 end

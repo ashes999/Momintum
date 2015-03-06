@@ -66,10 +66,14 @@ class SparksController < ApplicationController
       
       if Rails.application.config.feature_map.enabled?(:follow_users)
         if operation == :create
-          SparkMailer.spark_created(@spark).deliver_later
+          @spark.interested_parties.each do |email|
+            SparkMailer.spark_created(@spark, email).deliver_later
+          end
         elsif operation == :update
           if updated_description
-            SparkMailer.spark_updated(@spark).deliver_later
+            @spark.interested_parties.each do |email|
+              SparkMailer.spark_updated(@spark, email).deliver_later
+            end
           end
         end
       end

@@ -113,7 +113,7 @@ class SparksControllerTest < ActionController::TestCase
   
   ### "Follow" tests
   
-  test "creating a new spark emails followers" do
+  test "creating a new spark emails owner's followers" do
     owner = create_user(:username => 'owner')
     follower = create_user(:username => 'follower')
     Follow.create(:follower_id => follower.id, :target_id => owner.id)
@@ -122,6 +122,8 @@ class SparksControllerTest < ActionController::TestCase
     sign_in(owner)
     assert_difference 'ActionMailer::Base.deliveries.size', +1 do
       post :create, :spark => {name: name, summary: 'test spark', description: 'hi', owner_id: owner.id }
+      # Verify the spark exists
+      assert_not_nil(Spark.find_by_name(name))
     end
     
     spark = Spark.last
@@ -132,11 +134,16 @@ class SparksControllerTest < ActionController::TestCase
     assert_match 'new spark', follow_email.body.to_s
   end
   
-  test "updating a spark description emails followers" do
+  test "updating a spark description emails owner's followers and spark's likers" do
     owner = create_user(:username => 'owner')
+    
     follower = create_user(:username => 'follower')
     Follow.create(:follower_id => follower.id, :target_id => owner.id)
+    
     spark = create_spark(:name => 'spark 1', :owner_id => owner.id)
+    
+    liker = create_user(:username => 'liker')
+    Like.create(:user_id => liker.id, :spark_id => spark.id)
     
     # No description change? No email.
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
@@ -146,7 +153,8 @@ class SparksControllerTest < ActionController::TestCase
     end
     
     sign_in(owner)
-    assert_difference 'ActionMailer::Base.deliveries.size', +1 do
+    # Two emails: one to 'liker', and one to 'follower'
+    assert_difference 'ActionMailer::Base.deliveries.size', +2 do
       patch :update, { :id => spark.id, :spark => { :name => spark.name, :summary => spark.summary, :description => "Updated on #{Time.new}" }}
     end
     

@@ -1,8 +1,12 @@
 # Usage: if Rails.application.config.feature_map.enabled?(:email) ...
 class FeatureMap
 
-  def initialize
-    reload
+  def initialize(hash = nil)
+    if hash.nil?
+      reload
+    else
+      @hash = hash
+    end
   end
   
   def enabled?(feature)

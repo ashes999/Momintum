@@ -31,4 +31,26 @@ class Spark < ActiveRecord::Base
   if Rails.application.config.feature_map.enabled?(:spark_likes)
     has_many :likes
   end
+  
+  def interested_parties
+    to_return = []
+    
+    # Include people who like the idea
+    if Rails.application.config.feature_map.enabled?(:spark_likes)
+      self.likes.each do |l|
+        to_return << l.user.email
+      end
+    end
+    
+    # Include people who are following the owner
+    if Rails.application.config.feature_map.enabled?(:follow_users)
+      User.find(self.owner_id).follows.each do |f|
+        to_return << f.user.email
+      end
+    end  
+    
+    # TODO: include the team
+      
+    return to_return.uniq
+  end
 end

@@ -30,5 +30,8 @@ module Workspace
     # Hence, it's here.
     config.markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML,
       {:autolink => true, :space_after_headers => true, :quote => true })
+      
+    # Set Active Job backend to delayed_job
+    config.active_job.queue_adapter = :delayed_job
   end
 end

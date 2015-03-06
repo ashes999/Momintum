@@ -14,6 +14,10 @@ class User < ActiveRecord::Base
   if Rails.application.config.feature_map.enabled?(:spark_likes)
     has_many :likes
   end
+  
+  if Rails.application.config.feature_map.enabled?(:follow_users)
+    has_many :follows, :foreign_key => 'target_id'
+  end
 
   validates :email,
     :presence => true,

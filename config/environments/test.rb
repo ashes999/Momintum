@@ -40,4 +40,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  
+  # No job queueing in tests
+  Delayed::Worker.delay_jobs = false
 end

@@ -26,8 +26,12 @@ gem 'devise',         '3.4.1'
 
 # Automatic form client-side validation
 gem 'html5_validators', '1.1.2'
-
+# Markdown rendering for content
 gem 'redcarpet',        '3.2.2'
+
+# Background emails
+gem 'delayed_job',                '4.0.6'
+gem 'delayed_job_active_record',  '4.0.3'
 
 group :development, :test do
     # Use sqlite3 as the database for Active Record

@@ -6,13 +6,7 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
-  # Add more helper methods to be used by all tests here...
-end
-
-class ActionController::TestCase
-  # Source of the sign_in method
-  include Devise::TestHelpers
-  
+  # only a user name is required
   def create_user(args)
     u = User.new(:username => args[:username], :email => args[:email] || "#{args[:username]}@#{args[:username]}.com", :password => args[:password] || 'password')
     u.skip_confirmation!
@@ -21,6 +15,7 @@ class ActionController::TestCase
     return u
   end
   
+  # only a name is required
   def create_spark(args)
     name = args[:name]
     owner_id = args[:owner_id]
@@ -28,4 +23,9 @@ class ActionController::TestCase
     raise "Failed to create spark: #{s.errors.messages}" if s.id == 0
     return s
   end
+end
+
+class ActionController::TestCase
+  # Source of the sign_in method
+  include Devise::TestHelpers
 end
