@@ -14,6 +14,10 @@ class Spark < ActiveRecord::Base
     has_many :canvas_sections
   end
   
+  if Rails.application.config.feature_map.enabled?(:spark_teams)
+    has_and_belongs_to_many :team_members, :class_name => 'User', :join_table => :sparks_users
+  end
+  
   def ownerless?
     return self.owner_id.nil? || self.owner.nil?
   end

@@ -6,5 +6,6 @@
   "activity": true,     # activity/history on users/sparks
   "spark_likes": true,  # users can like sparks
   "follow_users": true, # users can follow other users
-  "ideation": true      # spark ideation
+  "ideation": true,     # spark ideation
+  "spark_teams": true   # teams and spark team members
 }
