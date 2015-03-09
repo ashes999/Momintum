@@ -14,7 +14,7 @@ class Spark < ActiveRecord::Base
     return self.owner_id.nil? || self.owner.nil?
   end
   
-  # Name shown in the activity partial
+  # Name shown in the activity 
   # Also a safe name to show in general
   def activity_name
     return self.name

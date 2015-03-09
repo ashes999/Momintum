@@ -33,6 +33,9 @@ gem 'redcarpet',        '3.2.2'
 gem 'delayed_job',                '4.0.6'
 gem 'delayed_job_active_record',  '4.0.3'
 
+# Tabs, etc.
+gem 'jquery-ui-rails',            '5.0.3'
+
 group :development, :test do
     # Use sqlite3 as the database for Active Record
     gem 'sqlite3',     '1.3.9'

@@ -1,33 +1,14 @@
-<h2><%= @spark.name %></h2>
+  <script type="text/javascript">
+    $(function () {
+        $("#tabs").tabs();
+    });
+  </script>
 
-<p><strong>Name:</strong> <%= @spark.name %></p>
-<p><strong>Summary:</strong> <%= @spark.summary %></p>
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-details" id="detailsTab">Details</a></li>
+        <li><a href="#tabs-ideation" id="ideationTab">Ideation</a></li>
+    </ul>
 
-<% if Rails.application.config.feature_map.enabled?(:spark_likes) %>
-  <p><strong>Likes:</strong> <span id='num_likes'><%= @spark.likes.count %></span> likes
-  
-  <% if current_user.nil? %>
-    | <a href="" onclick='alert("You must be logged in to like this spark.");'/>Like</a>
-  <% elsif !current_user.nil? && current_user.id != @spark.owner_id  %>
-    <% if Like.find_by(:user_id => current_user.id, :spark_id => @spark.id).nil? %>
-      | <%= link_to 'Like', { :controller => 'likes', :action => 'like', :user_id => current_user.id, :spark_id => @spark.id }, :method => :post, :remote => true, :id => 'like_link' %>
-    <% else %>
-      | <%= link_to 'Disike', { :controller => 'likes', :action => 'dislike', :user_id => current_user.id, :spark_id => @spark.id }, :method => :delete, :remote => true, :id => 'like_link' %>
-    <% end %>
-  <% end %></p>
-<% end %>
-
-<p><strong>Description:</strong></p>
-<%= raw Rails.application.config.markdown.render(@spark.description) %>
-<br />
-
-<%= link_to 'Edit', edit_spark_path(@spark) if !current_user.nil? && current_user.can_edit?(@spark) %>
-
-<% if Rails.application.config.feature_map.enabled?(:activity) %>
-  <h2>Recent Activity</h2>
-  <ul>
-  <% @spark.activities.each do |a| %>
-    <li><%= render :partial => '/activities/activity', :locals => { :activity => a } %></li>
-  <% end %>
-  </ul>
-<% end %>
+<%= render 'main_details' %>
+<%= render 'ideation' %>

@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
     return !spark.ownerless? && (self.is_owner?(spark) || self.is_on_team?(spark))
   end
   
-  # Name shown in the activity partial
+  # Name shown in the activity 
   # Also a safe name to show in general (eg. email vs. username)
   def activity_name
     if Rails.application.config.feature_map.enabled?(:username)
