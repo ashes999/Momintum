@@ -10,6 +10,10 @@ class Spark < ActiveRecord::Base
   
   belongs_to :owner, :class_name => 'User', :foreign_key => 'owner_id' 
   
+  if Rails.application.config.feature_map.enabled?(:activity)
+    has_many :canvas_sections
+  end
+  
   def ownerless?
     return self.owner_id.nil? || self.owner.nil?
   end

@@ -1,0 +1,41 @@
+<%= form_for(@canvas_section) do |f| %>
+  <% if @canvas_section.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@canvas_section.errors.count, "error") %> prohibited this canvas_section from being saved:</h2>
+
+      <ul>
+      <% @canvas_section.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :spark_id %><br>
+    <%= f.number_field :spark_id %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :x %><br>
+    <%= f.number_field :x %>
+  </div>
+  <div class="field">
+    <%= f.label :y %><br>
+    <%= f.number_field :y %>
+  </div>
+  <div class="field">
+    <%= f.label :width %><br>
+    <%= f.number_field :width %>
+  </div>
+  <div class="field">
+    <%= f.label :height %><br>
+    <%= f.number_field :height %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

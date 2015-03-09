@@ -1,14 +1,22 @@
+<% content_for :javascript_includes do %>
   <script type="text/javascript">
     $(function () {
         $("#tabs").tabs();
     });
   </script>
+<% end %>
 
 <div id="tabs">
     <ul>
         <li><a href="#tabs-details" id="detailsTab">Details</a></li>
-        <li><a href="#tabs-ideation" id="ideationTab">Ideation</a></li>
+        
+        <% if Rails.application.config.feature_map.enabled?(:ideation) %> 
+          <li><a href="#tabs-ideation" id="ideationTab">Ideation</a></li>
+        <% end %>
     </ul>
 
 <%= render 'main_details' %>
+
+<% if Rails.application.config.feature_map.enabled?(:ideation) %> 
 <%= render 'ideation' %>
+<% end %>

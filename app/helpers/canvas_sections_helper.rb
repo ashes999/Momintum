@@ -1,0 +1,2 @@
+module CanvasSectionsHelper
+end

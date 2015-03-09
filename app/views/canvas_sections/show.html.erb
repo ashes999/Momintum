@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Spark:</strong>
+  <%= @canvas_section.spark_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @canvas_section.name %>
+</p>
+
+<p>
+  <strong>X:</strong>
+  <%= @canvas_section.x %>
+</p>
+
+<p>
+  <strong>Y:</strong>
+  <%= @canvas_section.y %>
+</p>
+
+<p>
+  <strong>Width:</strong>
+  <%= @canvas_section.width %>
+</p>
+
+<p>
+  <strong>Height:</strong>
+  <%= @canvas_section.height %>
+</p>
+
+<%= link_to 'Edit', edit_canvas_section_path(@canvas_section) %> |
+<%= link_to 'Back', canvas_sections_path %>

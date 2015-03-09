@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+#
+#one:
+  #spark_id: 1
+  #name: MyString
+  #x: 1
+  #'y': 1
+  #width: 1
+  #height: 1
+
+#two:
+  #spark_id: 1
+  #name: MyString
+  #x: 1
+  #'y': 1
+  #width: 1
+  #height: 1

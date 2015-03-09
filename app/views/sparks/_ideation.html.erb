@@ -1,3 +1,5 @@
 <div id="tabs-ideation">
-  <p>Coming soon: ideation</p>
+  <% @spark.canvas_sections.each do |c| %>
+      <p><%= c.name %></p>
+  <% end %>
 </div>
