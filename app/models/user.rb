@@ -50,18 +50,16 @@ class User < ActiveRecord::Base
     end
   end
   
-  # rename to owns?
-  def is_owner?(spark)
+  def owns?(spark)
     return !spark.ownerless? && !spark.owner_id.nil? && self.id == spark.owner.id
   end
   
-  # rename to on_team?
-  def is_on_team?(spark)
-    return false
+  def on_team?(spark)
+    return spark.team_members.include?(self)
   end
   
   def can_edit?(spark)
-    return !spark.ownerless? && (self.is_owner?(spark) || self.is_on_team?(spark))
+    return !spark.ownerless? && (self.owns?(spark) || self.on_team?(spark))
   end
   
   # Name shown in the activity 

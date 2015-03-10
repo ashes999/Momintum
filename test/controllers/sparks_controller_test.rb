@@ -3,9 +3,7 @@ require 'test_helper'
 class SparksControllerTest < ActionController::TestCase
   setup do
     @controller = SparksController.new # sets controller for :get, etc.
-    @user = User.new(:username => 'test', :email => 'test@test.com', :password => 'password')
-    @user.skip_confirmation!
-    @user.save
+    @user = create_user(:username => 'sparkcontrolleruser')
     assert @user.valid?, "Failed to create user: #{@user.errors.messages}"
     @spark = Spark.create(:name => 'controller test', :description => 'test spark', :summary => 'test')
     assert @spark.valid?, "Failed to create spark: #{@spark.errors.messages}"
@@ -69,7 +67,7 @@ class SparksControllerTest < ActionController::TestCase
     assert(flash[:alert].include?('permission'))
   end
   
-  test "edit edits the spark" do
+  test "owner can edit the spark" do
     sign_in(@user)
     s = Spark.create(:name => 'spark', :description => 'tbd', :summary => 'summary', :owner_id => @user.id)
     patch :update, :id => s.id, :spark => { name: 'updated name', summary: 'updated summary', description: 'updated description' }
@@ -79,6 +77,34 @@ class SparksControllerTest < ActionController::TestCase
     assert_equal('updated summary', s.summary)
     assert_equal('updated description', s.description)
   end
+  
+  test "team members can edit the spark" do
+    s = Spark.create(:name => 'spark', :description => 'tbd', :summary => 'summary', :owner_id => @user.id)
+    teamie = create_user(:username => 'teamie')
+    s.team_members << teamie
+    
+    sign_in(teamie)
+    patch :update, :id => s.id, :spark => { name: 'updated name', summary: 'updated summary', description: 'updated description' }
+    s.reload
+    
+    assert_equal('updated name', s.name)
+    assert_equal('updated summary', s.summary)
+    assert_equal('updated description', s.description)
+  end
+  
+  test "strangers cannot edit the spark" do
+    s = Spark.create(:name => 'spark', :description => 'tbd', :summary => 'summary', :owner_id => @user.id)
+    hacker = create_user(:username => 'hacker')
+    sign_in(hacker)
+    
+    patch :update, :id => s.id, :spark => { name: 'hacked name', summary: 'hacked summary', description: 'hacked description' }
+    s.reload
+    
+    assert_equal('spark', s.name)
+    assert_equal('summary', s.summary)
+    assert_equal('tbd', s.description)
+  end
+  
   
   test "creating a spark creates an activity for that user and spark" do
     sign_in(@user)
@@ -134,16 +160,22 @@ class SparksControllerTest < ActionController::TestCase
     assert_match 'new spark', follow_email.body.to_s
   end
   
-  test "updating a spark description emails owner's followers and spark's likers" do
+  test "updating a spark description emails owner's followers and spark's likers and team members" do
     owner = create_user(:username => 'owner')
     
+    # Followers
     follower = create_user(:username => 'follower')
     Follow.create(:follower_id => follower.id, :target_id => owner.id)
     
     spark = create_spark(:name => 'spark 1', :owner_id => owner.id)
     
+    # Likers
     liker = create_user(:username => 'liker')
     Like.create(:user_id => liker.id, :spark_id => spark.id)
+    
+    # Team members
+    teamie = create_user(:username => 'teamie')
+    spark.team_members << teamie
     
     # No description change? No email.
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
@@ -153,8 +185,8 @@ class SparksControllerTest < ActionController::TestCase
     end
     
     sign_in(owner)
-    # Two emails: one to 'liker', and one to 'follower'
-    assert_difference 'ActionMailer::Base.deliveries.size', +2 do
+    # Emails: one to 'liker', one to 'follower', one to 'teamie'
+    assert_difference 'ActionMailer::Base.deliveries.size', +3 do
       patch :update, { :id => spark.id, :spark => { :name => spark.name, :summary => spark.summary, :description => "Updated on #{Time.new}" }}
     end
     

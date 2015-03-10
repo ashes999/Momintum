@@ -55,10 +55,15 @@ class Spark < ActiveRecord::Base
       User.find(self.owner_id).follows.each do |f|
         to_return << f.user.email
       end
-    end  
+    end
     
-    # TODO: include the team
-      
-    return to_return.uniq
+    # Include team members
+    if Rails.application.config.feature_map.enabled?(:spark_teams)
+      self.team_members.each do |user|
+        to_return << user.email
+      end
+    end
+    
+    return to_return.uniq # dedupe
   end
 end

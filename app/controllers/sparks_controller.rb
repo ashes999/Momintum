@@ -18,7 +18,9 @@ class SparksController < ApplicationController
   
   def update
     @spark = Spark.find(params[:id])
-    if (create_or_update() == true)
+    if !current_user.can_edit?(@spark)
+      flash[:alert] = 'You don\'t have permission to edit this spark.'
+    elsif (create_or_update() == true)
       Activity.create(:key => :updated_spark, :source_id => current_user.id, :source_type => :user,
         :target_id => @spark.id, :target_type => :spark)
     end

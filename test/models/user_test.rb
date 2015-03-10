@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(:username => 'test', :email => 'test.user@test.com', :password => "test1234")
+    @user = create_user(:username => 'usertests')
     if !@user.valid?
       raise "Test setup can't create a valid user: #{@user.errors.full_messages}"
     end
@@ -81,18 +81,26 @@ class UserTest < ActiveSupport::TestCase
     end
   end
   
-  test "is_owner returns true if spark owner id matches user id" do
+  test "owns? returns true if spark owner id matches user id" do
     user = User.new(:username => 'test')
     user.id = 1
     
     s = Spark.new
-    assert_not(user.is_owner?(s))
+    assert_not(user.owns?(s))
     
     s.owner = user
-    assert(user.is_owner?(s))
+    assert(user.owns?(s))
     
     s.owner_id = nil
-    assert_not(user.is_owner?(s))
+    assert_not(user.owns?(s))
+  end
+  
+  test "on_team? returns true for team members" do
+    s = create_spark(:name => 'team test', :owner_id => @user.id)
+    t = create_user(:username => 'teamie')
+    assert_not t.on_team?(s)
+    s.team_members << t
+    assert t.on_team?(s)
   end
   
   test "can_edit returns true for owner" do
@@ -106,6 +114,11 @@ class UserTest < ActiveSupport::TestCase
     assert(user.can_edit?(s))
   end
   
-  # test is_on_team is true
-  # test can_edit is true if on team
+  test "can_edit returns false for strangers and true for team members" do
+    s = create_spark(:name => 'team test', :owner_id => @user.id)
+    t = create_user(:username => 'teamie')
+    assert_not t.can_edit?(s)
+    s.team_members << t
+    assert t.can_edit?(s)
+  end
 end

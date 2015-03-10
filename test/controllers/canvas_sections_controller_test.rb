@@ -1,3 +1,4 @@
+=begin
 require 'test_helper'
 
 class CanvasSectionsControllerTest < ActionController::TestCase
@@ -47,3 +48,4 @@ class CanvasSectionsControllerTest < ActionController::TestCase
     assert_redirected_to canvas_sections_path
   end
 end
+=end

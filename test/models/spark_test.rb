@@ -111,4 +111,17 @@ class SparkTest < ActiveSupport::TestCase
     assert(s.interested_parties.include?(u2.email))
     assert(s.interested_parties.include?(u3.email))
   end
+  
+  test "interested_parties includes all team members" do
+    u1 = create_user(:username => 'owner')
+    u2 = create_user(:username => 'tee1')
+    u3 = create_user(:username => 'tee2')
+    
+    s = create_spark(:name => 'spark 1', :owner_id => u1.id)
+    s.team_members << u2
+    s.team_members << u3
+    
+    assert(s.interested_parties.include?(u2.email))
+    assert(s.interested_parties.include?(u3.email))
+  end
 end
