@@ -19,6 +19,10 @@
       
       <%= yield :javascript_includes %>
       <%= yield %>
+      
+      <script type="text/javascript">
+        <%= yield :javascript %>
+      </script>
     </div>
   <%= render 'layouts/footer' %>
 </body>
