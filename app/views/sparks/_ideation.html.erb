@@ -6,7 +6,6 @@
     // Target HTML:
     // <div class="canvasSection" id="sectionId" >
     //    <div id="nameFieldId" contenteditable="true" style="float: left;"><strong>name</strong></div>
-    //   <img src="~/Images/upvote-voted.png" style="float: right;" id="sectionId-newNote" /><br /><br />
     // <div>
     var section = document.createElement("div");
     section.className = "canvasSection";
@@ -16,11 +15,11 @@
     var nameField = document.createElement("div");
     var nameFieldId = json.id + "Name";
     nameField.id = nameFieldId;	        
-    nameField.innerHTML = "<strong>" + name + "</strong>";
+    nameField.innerHTML = "<strong>" + json.name + "</strong>";
     section.appendChild(nameField);
+    
     $('#' + nameField.id).css("float", "left");
-
-    $('#' + section.id).css({ left: section.x, top: section.y, width: section.width, height: section.height });
+    $('#' + section.id).css({ left: json.x, top: json.y, width: json.width, height: json.height });
   }
   
   <% @spark.canvas_sections.each do |c| %>
