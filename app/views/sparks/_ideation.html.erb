@@ -4,27 +4,5 @@
 </div>
 
 <% content_for :javascript do %>
-  function addSection(json) {  
-    // Target HTML:
-    // <div class="canvasSection" id="sectionId" >
-    //    <div id="nameFieldId" contenteditable="true" style="float: left;"><strong>name</strong></div>
-    // <div>
-    var section = document.createElement("div");
-    section.className = "canvasSection";
-    section.id = json.id;
-    $('#sectionContainer').append(section);
-
-    var nameField = document.createElement("div");
-    var nameFieldId = json.id + "Name";
-    nameField.id = nameFieldId;	        
-    nameField.innerHTML = "<strong>" + json.name + "</strong>";
-    section.appendChild(nameField);
-    
-    $('#' + nameField.id).css("float", "left");
-    $('#' + section.id).css({ left: json.x, top: json.y, width: json.width, height: json.height });
-  }
-  
-  <% @spark.canvas_sections.each do |c| %>
-    addSection(<%= raw c.to_json %>);
-  <% end %>
+  <%= render :partial => 'sparks/js/sections.js' %>
 <% end %>
