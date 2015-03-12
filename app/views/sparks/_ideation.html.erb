@@ -1,4 +1,6 @@
 <div id="tabs-ideation">
+  <div id="sectionContainer">
+  </div>
 </div>
 
 <% content_for :javascript do %>
@@ -10,7 +12,7 @@
     var section = document.createElement("div");
     section.className = "canvasSection";
     section.id = json.id;
-    $('#tabs-ideation').append(section);
+    $('#sectionContainer').append(section);
 
     var nameField = document.createElement("div");
     var nameFieldId = json.id + "Name";

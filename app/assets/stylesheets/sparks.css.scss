@@ -1,3 +1,13 @@
 // Place all the styles related to the sparks controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+/// ideation
+#tabs-ideation {
+  min-height: 400px;
+}
+
+#sectionContainer {
+  position: relative; // shows under tabs
+  top: 8px; 
+}
