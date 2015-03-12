@@ -4,18 +4,6 @@
 </div>
 
 <% content_for :javascript do %>
-
-  function post(relativeUrl, data, callback) {
-    var rootUrl = '<%= ENV['C9_HOSTNAME'] %>';
-    if (rootUrl.endsWith("/") && relativeUrl.indexOf("/") == 0) {
-        relativeUrl = relativeUrl.substring(1);
-    }
-  
-    var url = rootUrl + relativeUrl;            
-    console.log(url);
-  
-    $.post(url, data, callback);
-  }
-        
+  <%= render :partial => 'sparks/js/common.js' %>      
   <%= render :partial => 'sparks/js/sections.js' %>
 <% end %>

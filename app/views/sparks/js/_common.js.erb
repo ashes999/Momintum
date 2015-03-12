@@ -1,3 +1,9 @@
+function getIdFromEvent(ui) {
+  var id = ui.helper[0].id;
+  id = id.substring(id.lastIndexOf("-") + 1);
+  return id;
+}
+
 function post(relativeUrl, data, callback) {
   var rootUrl = '<%= ENV['C9_HOSTNAME'] %>';
   if (rootUrl.endsWith("/") && relativeUrl.indexOf("/") == 0) {
@@ -8,10 +14,4 @@ function post(relativeUrl, data, callback) {
   console.log(url);
 
   $.post(url, data, callback);
-}
-
-function getIdFromEvent(ui) {
-  var id = ui.helper[0].id;
-  id = id.substring(id.lastIndexOf("-") + 1);
-  return id;
 }
