@@ -1,0 +1,17 @@
+function post(relativeUrl, data, callback) {
+  var rootUrl = '<%= ENV['C9_HOSTNAME'] %>';
+  if (rootUrl.endsWith("/") && relativeUrl.indexOf("/") == 0) {
+      relativeUrl = relativeUrl.substring(1);
+  }
+
+  var url = rootUrl + relativeUrl;            
+  console.log(url);
+
+  $.post(url, data, callback);
+}
+
+function getIdFromEvent(ui) {
+  var id = ui.helper[0].id;
+  id = id.substring(id.lastIndexOf("-") + 1);
+  return id;
+}
