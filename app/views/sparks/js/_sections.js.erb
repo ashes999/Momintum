@@ -1,4 +1,4 @@
-function addSection(json) {  
+function addSection(json) {
   // Target HTML:
   // <div class="canvasSection" id="sectionId" >
   //    <div id="nameFieldId" contenteditable="true" style="float: left;"><strong>name</strong></div>
@@ -19,32 +19,34 @@ function addSection(json) {
 }
 
 function unlockCanvas(sectionId) {
-  // Section events
-  $('#' + sectionId).draggable({                
-    stop: function (event, ui) {
-      var id = getIdFromEvent(ui);
-      var x = Math.round(ui.position.left);
-      var y = Math.round(ui.position.top);
-      post("/CanvasSection/UpdatePosition?sectionId=" + id + "&x=" + x + "&y=" + y);
-    },
-    drag: resizeContainerIfNecessary
-  }).resizable({
-    stop: function (event, ui) {
-      var id = getIdFromEvent(ui);
-      var width = Math.round(ui.size.width);
-      var height = Math.round(ui.size.height);
-      post("/CanvasSection/UpdateSize?sectionId=" + id + "&width=" + width + "&height=" + height);
-    },
-    resize: resizeContainerIfNecessary
-  }).click(function() {
+  if (canEdit) {
+    // Section events
+    $('#' + sectionId).draggable({                
+      stop: function (event, ui) {
+        var id = getIdFromEvent(ui);
+        var x = Math.round(ui.position.left);
+        var y = Math.round(ui.position.top);
+        post("/CanvasSection/UpdatePosition?sectionId=" + id + "&x=" + x + "&y=" + y);
+      },
+      drag: resizeContainerIfNecessary
+    }).resizable({
+      stop: function (event, ui) {
+        var id = getIdFromEvent(ui);
+        var width = Math.round(ui.size.width);
+        var height = Math.round(ui.size.height);
+        post("/CanvasSection/UpdateSize?sectionId=" + id + "&width=" + width + "&height=" + height);
+      },
+      resize: resizeContainerIfNecessary
+    }).click(function() {
+      var nameFieldId = sectionId + "Name";
+      var nameField = document.getElementById(nameFieldId);
+      nameField.focus();
+    });
+  
     var nameFieldId = sectionId + "Name";
     var nameField = document.getElementById(nameFieldId);
-    nameField.focus();
-  });
-
-  var nameFieldId = sectionId + "Name";
-  var nameField = document.getElementById(nameFieldId);
-  nameField.setAttribute("contenteditable", "true");
+    nameField.setAttribute("contenteditable", "true");
+  }
 }
 
 function resizeContainerIfNecessary(event, data, child) {            

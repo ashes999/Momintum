@@ -1,4 +1,7 @@
 <div id="tabs-ideation">
+  <% if current_user.nil? || !current_user.can_edit?(@spark) %>
+    <p>Only the owner and team members can change ideation sections.</p>
+  <% end %>
   <div id="sectionContainer">
   </div>
 </div>

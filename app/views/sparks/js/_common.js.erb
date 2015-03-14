@@ -12,6 +12,8 @@ function post(relativeUrl, data, callback) {
 
   var url = rootUrl + relativeUrl;            
   console.log(url);
-
-  $.post(url, data, callback);
+  alert("POST: " + url + " with " + data);
+  //$.post(url, data, callback);
 }
+
+var canEdit = <%= !current_user.nil? && current_user.can_edit?(@idea) %>;
