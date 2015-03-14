@@ -16,4 +16,4 @@ function post(relativeUrl, data, callback) {
   //$.post(url, data, callback);
 }
 
-var canEdit = <%= !current_user.nil? && current_user.can_edit?(@idea) %>;
+var canEdit = <%= !current_user.nil? && current_user.can_edit?(@spark) %>;
