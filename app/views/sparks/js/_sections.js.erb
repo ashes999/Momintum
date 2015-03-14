@@ -1,3 +1,20 @@
+<% @spark.canvas_sections.each do |c| %>
+  var json  = <%= raw c.to_json %>;
+  var sectionId = 'section' + json.id;
+  addSection(json);
+<% end %>
+
+if (canEdit) {
+  $('#addSection').button().click(function () {
+      addNewSection();
+  });
+}
+
+function addNewSection() {
+  // AJAX POST to make a new one
+  addSection( <%= raw CanvasSection.new.to_json %> );
+}
+
 function addSection(json) {
   // Target HTML:
   // <div class="canvasSection" id="sectionId" >
@@ -16,6 +33,8 @@ function addSection(json) {
   
   $('#' + nameField.id).css("float", "left");
   $('#' + section.id).css({ left: json.x, top: json.y, width: json.width, height: json.height });
+  
+  unlockCanvas(section.id);
 }
 
 function unlockCanvas(sectionId) {
@@ -61,11 +80,3 @@ function resizeContainerIfNecessary(event, data, child) {
     container.height(child.position().top + child.height() + padding);
   }
 }
-
-<% @spark.canvas_sections.each do |c| %>
-  var json  = <%= raw c.to_json %>;
-  var sectionId = 'section' + json.id;
-  addSection(json);
-  alert("Unlocking " + sectionId);
-  unlockCanvas(sectionId);
-<% end %>

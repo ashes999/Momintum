@@ -1,6 +1,10 @@
 <div id="tabs-ideation">
   <% if current_user.nil? || !current_user.can_edit?(@spark) %>
     <p>Only the owner and team members can change ideation sections.</p>
+  <% else %>
+    <p>Click-drag to move sections; use the corner handle to resize; double-click the name to rename.</p>
+    <a id="addSection">Add Section</a>        
+    <!-- <img id="lockButton" src="~/Images/lock@(Model.AreSectionsLocked ? "" : "-unlocked").png" width="64" height="64" style="float: right;" /> -->
   <% end %>
   <div id="sectionContainer">
   </div>
