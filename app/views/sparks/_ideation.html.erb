@@ -3,7 +3,7 @@
     <p>Only the owner and team members can change ideation sections.</p>
   <% else %>
     <p>Click-drag to move sections; use the corner handle to resize; double-click the name to rename.</p>
-    <a id="addSection">Add Section</a>        
+    <a id="addSectionButton">Add Section</a>        
     <!-- <img id="lockButton" src="~/Images/lock@(Model.AreSectionsLocked ? "" : "-unlocked").png" width="64" height="64" style="float: right;" /> -->
   <% end %>
   <div id="sectionContainer">
@@ -11,6 +11,6 @@
 </div>
 
 <% content_for :javascript do %>
-  <%= render :partial => 'sparks/js/common.js' %>      
-  <%= render :partial => 'sparks/js/sections.js' %>
+  <%= raw render :partial => 'sparks/js/common.js.coffee' %>      
+  <%= raw render :partial => 'sparks/js/sections.js.coffee' %>
 <% end %>
