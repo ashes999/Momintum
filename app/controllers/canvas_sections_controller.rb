@@ -1,74 +1,70 @@
-class CanvasSectionsController < ApplicationController
-  before_action :set_canvas_section, only: [:show, :edit, :update, :destroy]
-
-  # GET /canvas_sections
-  # GET /canvas_sections.json
-  def index
-    @canvas_sections = CanvasSection.all
-  end
-
-  # GET /canvas_sections/1
-  # GET /canvas_sections/1.json
-  def show
-  end
-
-  # GET /canvas_sections/new
-  def new
-    @canvas_section = CanvasSection.new
-  end
-
-  # GET /canvas_sections/1/edit
-  def edit
-  end
-
-  # POST /canvas_sections
-  # POST /canvas_sections.json
-  def create
-    @canvas_section = CanvasSection.new(canvas_section_params)
-
-    respond_to do |format|
-      if @canvas_section.save
-        format.html { redirect_to @canvas_section, notice: 'Canvas section was successfully created.' }
-        format.json { render :show, status: :created, location: @canvas_section }
+if Rails.application.config.feature_map.enabled?(:ideation)
+  class CanvasSectionsController < ApplicationController
+    before_filter :authenticate_user!
+    
+    def create
+      spark = Spark.find(params[:spark_id])
+      # Place under the rest
+      lowest_canvas = spark.canvas_sections.order("y + height DESC").first
+      
+      if lowest_canvas.nil?
+        max_y = 0
       else
-        format.html { render :new }
-        format.json { render json: @canvas_section.errors, status: :unprocessable_entity }
+        max_y = lowest_canvas.y + lowest_canvas.height
+      end
+      
+      section = CanvasSection.new({:spark_id => spark.id, :name => 'New Section', :x => 0, :y => max_y, :width => 300, :height => 150})
+      
+      if section.valid?
+        section.save
+        result = section
+      else
+        message = 'Couldn\'t create canvas section.'
+        result = { :message => message }
+      end
+      
+      respond_to do |format|
+        format.html { puts "HTML"; redirect_to spark }
+        format.json { puts "JSON"; render json: result }
+        format.js
       end
     end
-  end
-
-  # PATCH/PUT /canvas_sections/1
-  # PATCH/PUT /canvas_sections/1.json
-  def update
-    respond_to do |format|
-      if @canvas_section.update(canvas_section_params)
-        format.html { redirect_to @canvas_section, notice: 'Canvas section was successfully updated.' }
-        format.json { render :show, status: :ok, location: @canvas_section }
-      else
-        format.html { render :edit }
-        format.json { render json: @canvas_section.errors, status: :unprocessable_entity }
+    
+    def update
+      sectionId = params[:sectionId] # eg. "section12"
+      sectionId = sectionId[sectionId.index('section') + 'section'.length, sectionId.length].strip
+      
+      x = params[:x]
+      y = params[:y]
+      puts "I got: #{sectionId}, #{x}, and #{y}"
+      message = 'Please specify the section' if sectionId.nil?
+      message = 'Please specify the x position' if x.nil?
+      message = 'Please specify the y position' if y.nil?
+      
+      if message.nil?
+        section = CanvasSection.find(sectionId)
+        section.x = x
+        section.y = y
+        
+        if section.valid?
+          section.save
+          result = section
+        else
+          message = 'Couldn\'t save canvas section.'
+        end
+      end
+      
+      result = { :error => message } if !message.nil?
+      
+      respond_to do |format|
+        format.html { puts "HTML"; redirect_to spark }
+        format.json { puts "JSON"; render json: result }
+        format.js
       end
     end
-  end
-
-  # DELETE /canvas_sections/1
-  # DELETE /canvas_sections/1.json
-  def destroy
-    @canvas_section.destroy
-    respond_to do |format|
-      format.html { redirect_to canvas_sections_url, notice: 'Canvas section was successfully destroyed.' }
-      format.json { head :no_content }
+    
+    def destroy
+      
     end
   end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_canvas_section
-      @canvas_section = CanvasSection.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def canvas_section_params
-      params.require(:canvas_section).permit(:spark_id, :name, :x, :y, :width, :height)
-    end
 end

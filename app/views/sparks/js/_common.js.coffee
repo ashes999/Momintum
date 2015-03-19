@@ -6,10 +6,36 @@ window.getIdFromEvent = (ui) ->
   return id
 
 window.post = (relativeUrl, data, callback) ->
+  ajax('POST', relativeUrl, data, callback)
+
+window.patch = (relativeUrl, data, callback) ->
+  ajax('PATCH', relativeUrl, data, callback)
+  
+window.ajax = (method, relativeUrl, data, callback) ->
   rootUrl = '<%= ENV['C9_HOSTNAME'] %>'
-  if rootUrl.endsWith('/') and relativeUrl.indexOf('/') == 0
-    relativeUrl = relativeUrl.substring(1)
+  rootUrl = "http://#{rootUrl}" unless rootUrl.indexOf('http://') == 0
+  relativeUrl = relativeUrl.substring(1) if rootUrl.endsWith('/') and relativeUrl.indexOf('/') == 0
   url = rootUrl + relativeUrl
-  console.log url
-  alert 'POST: ' + url + ' with ' + data
-  #$.post(url, data, callback);
+  console.log "#{method.toUpperCase()} #{url}"
+  
+  $.ajax({
+    headers : {
+      'Accept' : 'application/json',
+      'Content-Type' : 'application/json'
+    },
+    url : url,
+    type : method,
+    data : data,
+    success : (response) ->
+      alert(response.message) if response.message?
+      error(response.error) if response.error?
+      
+      return callback(response) if callback?
+      return response
+    , error : (jqXHR, textStatus, errorThrown) ->
+      error('An error occurred. Please try again or contact support.')
+      console.log("AJAX Error for #{method} #{url}: #{textStatus}", errorThrown)
+    #, complete: ->
+    #  console.log("Done!")
+  });
+  

@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
   
-  resources :canvas_sections
-
   root  'static_pages#home'
   get   'about'           => 'static_pages#about'
   get   'contact'         => 'static_pages#contact'
@@ -17,6 +15,10 @@ Rails.application.routes.draw do
 
   post 'likes/like'
   delete 'likes/dislike'
+
+  post 'canvas_sections/create'
+  patch 'canvas_sections/update'
+  delete 'canvas_sections/destroy'
 
   get 'users/index'
   get 'users/show'
