@@ -8,7 +8,7 @@ window.addSection = (json) ->
   # <div class="canvasSection" id="sectionId" >
   #    <div id="nameFieldId" contenteditable="true" style="float: left"><strong>name</strong></div>
   # <div>
-  console.log "Hi. My JSON is #{JSON.stringify(json)}"
+  
   section = document.createElement("div")
   section.className = "canvasSection"
   section.id = "section#{json.id}"
@@ -16,7 +16,7 @@ window.addSection = (json) ->
 
   nameField = document.createElement("div")
   nameFieldId = "section#{json.id}Name"
-  nameField.id = nameFieldId	        
+  nameField.id = nameFieldId          
   nameField.innerHTML = "<strong>#{json.name}</strong>"
   section.appendChild(nameField)
   
@@ -24,6 +24,9 @@ window.addSection = (json) ->
   $('#' + section.id).css({ left: json.x, top: json.y, width: json.width, height: json.height })
   
   unlockCanvas(section.id)
+  addSectionControls(section, nameFieldId)
+  
+  #resizeContainerIfNecessary(null, null, null)
 
 window.unlockCanvas = (sectionId) ->
   if (canEdit)
@@ -63,7 +66,51 @@ window.resizeContainerIfNecessary = (event, data, child) ->
   if (child.position().top > container.height() - child.height())
     container.height(child.position().top + child.height() + padding)
 
+
+window.addSectionControls = (section, nameFieldId) ->
+  if (canEdit)
+    buttonContainer = document.createElement("div")            
+    buttonContainer.id = "#{section.id}-buttons"
+    section.appendChild buttonContainer
+    $("##{section.id}-buttons").css("float", "right").css("padding", "4").width(32)
+    section.appendChild(document.createElement("br"))
+
+    # Add note button
+    addNoteButton = createImage("#{section.id}-newNote", "<%= image_path 'note.png' %>", 32, 32)
+    buttonContainer.appendChild(addNoteButton)	
+    buttonContainer.appendChild(document.createElement('br'))
+    buttonContainer.appendChild(document.createElement('br'))
+    $("##{section.id}-newNote").css("float", "right")
+    $("##{section.id}-newNote").click((event, ui) ->
+        container = event.target.parentNode
+        createAndSaveNote(container)
+    )
+
+    # Delete section button
+    deleteSectionButton = createImage("#{section.id}-deleteSection", "<%= image_path 'delete.png' %>", 32, 32)
+    buttonContainer.appendChild(deleteSectionButton)
+    $("##{section.id}-deleteSection").css("float", "right")
+    
+    $("##{section.id}-deleteSection").click((event, ui) ->
+      confirm("Are you sure? All notes from this section will be deleted.", () ->
+        http_delete("/canvas_sections/destroy?sectionId=#{section.id}", null, () ->
+          $("##{section.id}").remove()
+        )
+      )
+    )
+    
+    $("##{nameFieldId}").focusout((eventData) ->
+        id = eventData.target.id
+        id = id.substring(id.lastIndexOf("-") + 1, id.lastIndexOf("Name"))
+        newName = $(this).text()
+        post("/canvas_sections/update?sectionId=#{id}&name=#{newName}")
+    )
+
+    unlockCanvas(section.id) if (!isLocked)
+
+#
 # "Main" entry point
+#
 
 <% @spark.canvas_sections.each do |c| %>
 json  = <%= raw c.to_json %>
