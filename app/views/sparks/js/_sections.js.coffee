@@ -1,6 +1,6 @@
 window.addNewSection = ->
   # JSON has to be sent as a string, not object, for jQuery.post() to work.
-  post "/canvas_sections/create", '{ "spark_id": <%= @spark.id %> }', (result) ->
+  post '/canvas_sections/create', { spark_id: <%= @spark.id %> }, (result) ->
     addSection( result )
 
 window.addSection = (json) ->
@@ -36,7 +36,7 @@ window.unlockCanvas = (sectionId) ->
         id = getIdFromEvent(ui)
         x = Math.round(ui.position.left)
         y = Math.round(ui.position.top)
-        patch("/canvas_sections/update?sectionId=#{id}&x=#{x}&y=#{y}")
+        patch('/canvas_sections/update', { sectionId: id, x: x, y: y })
       ,
       drag: resizeContainerIfNecessary
     }).resizable({
@@ -44,7 +44,7 @@ window.unlockCanvas = (sectionId) ->
         id = getIdFromEvent(ui)
         width = Math.round(ui.size.width)
         height = Math.round(ui.size.height)
-        patch("/canvas_sections/update?sectionId=#{id}&width=#{width}&height=#{height}")
+        patch('/canvas_sections/update', { sectionId: id, width: width, height: height })
       ,
       resize: resizeContainerIfNecessary
     }).click( -> 

@@ -38,7 +38,7 @@ window.ajax = (method, relativeUrl, data, callback) ->
     },
     url: url,
     type: method,
-    data: data,
+    data: JSON.stringify(data),
     success: (response) ->
       alert(response.message) if response.message?
       error(response.error) if response.error?
@@ -46,7 +46,7 @@ window.ajax = (method, relativeUrl, data, callback) ->
       return callback(response) if callback?
       return response
     , error: (jqXHR, textStatus, errorThrown) ->
-      error('An error occurred. Please try again or contact support.')
+      error('An error occurred. Please try again or contact us if it persists.')
       console.log("AJAX Error for #{method} #{url}: #{textStatus}", errorThrown)
     #, complete: ->
     #  console.log("Done!")

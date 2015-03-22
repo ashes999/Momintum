@@ -39,17 +39,20 @@ if Rails.application.config.feature_map.enabled?(:ideation)
       sectionId = sectionIdToId(sectionId)
       message = 'Please specify the section' if sectionId.nil?
       section = CanvasSection.find(sectionId)
-      message = 'You don\'t have permission to ideate this spark.' if current_user.nil? || !current_user.can_edit?(section.spark)
       
-      x = params[:x]
-      y = params[:y]
+      if current_user.nil? || !current_user.can_edit?(section.spark)
+        message = 'You don\'t have permission to ideate this spark.'
+      else
       
-      message = 'Please specify the x position' if x.nil?
-      message = 'Please specify the y position' if y.nil?
-      
-      if message.nil? # valid input
-        section.x = x
-        section.y = y
+        x = params[:x]
+        y = params[:y]
+        width = params[:width]
+        height = params[:height]
+        
+        section.x = x unless x.nil?
+        section.y = y unless y.nil?
+        section.width = width unless width.nil?
+        section.height =  height unless height.nil?
         
         if section.valid?
           section.save
