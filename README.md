@@ -8,9 +8,12 @@ You may wish to look at:
 
 # Setup Notes
 
-Please make sure you define the following:
+This only works in Cloud9. We depend on certain envrionment variables that they set up, in order to function.
 
-- `ENV['admin_email']` for the admin dashboard
+Please make sure you do the following:
+
+- Define the environment variable `ENV['admin_email']` for the admin dashboard
+- Install the required `apt-get` packages for `capybara-webkit`. See [this blog post](http://rubyandrails.herokuapp.com/2015/capybara-and-capybara-webkit-in-cloud9/).
 
 # Main Reasons to Switch to Rails
 
