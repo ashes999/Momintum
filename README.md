@@ -13,6 +13,7 @@ This only works in Cloud9. We depend on certain envrionment variables that they 
 Please make sure you do the following:
 
 - Define the environment variable `ENV['admin_email']` for the admin dashboard
+- Define `ENV['C9_HOSTNAME']` for test automation and other stuff
 - Install the required `apt-get` packages for `capybara-webkit`. See [this blog post](http://rubyandrails.herokuapp.com/2015/capybara-and-capybara-webkit-in-cloud9/).
 
 # Main Reasons to Switch to Rails
