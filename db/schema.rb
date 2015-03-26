@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150309213647) do
+ActiveRecord::Schema.define(version: 20150326164400) do
 
   create_table "activities", force: :cascade do |t|
     t.string   "key",         null: false
@@ -62,6 +62,14 @@ ActiveRecord::Schema.define(version: 20150309213647) do
     t.integer  "spark_id",   null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "section_notes", force: :cascade do |t|
+    t.integer  "canvas_section_id"
+    t.string   "status"
+    t.text     "text"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "sparks", force: :cascade do |t|

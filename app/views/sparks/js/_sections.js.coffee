@@ -26,6 +26,9 @@ window.addSection = (json) ->
   unlockCanvas(section.id)
   addSectionControls(section, nameFieldId)
   
+  for note in json.section_notes
+    createNote(note)
+  
   #resizeContainerIfNecessary(null, null, null)
 
 window.unlockCanvas = (sectionId) ->
@@ -73,7 +76,7 @@ window.addSectionControls = (section, nameFieldId) ->
     buttonContainer.id = "#{section.id}-buttons"
     section.appendChild buttonContainer
     $("##{section.id}-buttons").css("float", "right").css("padding", "4").width(32)
-    section.appendChild(document.createElement("br"))
+    #section.appendChild(document.createElement("br"))
 
     # Add note button
     addNoteButton = createImage("#{section.id}-newNote", "<%= image_path 'note.png' %>", 32, 32)
@@ -107,13 +110,15 @@ window.addSectionControls = (section, nameFieldId) ->
     )
 
     unlockCanvas(section.id) if (!isLocked)
-
+  
+  section.appendChild(document.createElement("br"))
+  
 #
 # "Main" entry point
 #
 
 <% @spark.canvas_sections.each do |c| %>
-json  = <%= raw c.to_json %>
+json  = <%= raw c.to_json(:include => :section_notes) %>
 addSection json
 <% end %>
 

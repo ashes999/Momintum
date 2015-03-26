@@ -7,10 +7,26 @@
     <!-- <img id="lockButton" src="~/Images/lock@(Model.AreSectionsLocked ? "" : "-unlocked").png" width="64" height="64" style="float: right;" /> -->
   <% end %>
   <div id="sectionContainer">
+    
   </div>
-</div>
+
+<% if false %>
+  <div id="edit-note-dialog-form" title="Edit a Note" style="display: none;">
+    <form id="editNoteForm" method="get" action="">
+      <fieldset>
+  			<%= text_area(:note, :text, cols: 10, rows: 3) %>
+  			<%= select :note_status, options_for_select([["Prime", "Prime"], ["Undecided", "Undecided"]]) %>
+  			<%= hidden_field(:note, :id) %>
+  			<%= hidden_field(:note, :sectionId) %>
+		  </fieldset>
+		</form>
+	</div>
+<% end %>
 
 <% content_for :javascript do %>
-  <%= raw render :partial => 'sparks/js/common.js.coffee' %>      
+  <%= raw render :partial => 'sparks/js/common.js.coffee' %>
+  <%= raw render :partial => 'sparks/js/notes.js.coffee' %>      
   <%= raw render :partial => 'sparks/js/sections.js.coffee' %>
 <% end %>
+
+</div>
