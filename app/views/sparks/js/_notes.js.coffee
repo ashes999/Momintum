@@ -16,7 +16,7 @@ window.createNote = (json) ->
   $("#section#{sectionId}").append(newNote)
   # Visual (was pseudo) ID of the note
   $("##{text.id}").text(id)
-###
+
   $("##{newNote.id}").click(() ->
     $('#NoteText').val(json.text)
     $('#NoteId').val(id)
@@ -25,17 +25,11 @@ window.createNote = (json) ->
 
     # clear and re-clone
     finalButtons = formButtons.slice(0)
-    if status != "Prime"
-      finalButtons.push(deleteButton)
-      $('#NoteStatus').show()
-    else
-      $('#NoteStatus').hide()
     
     $('#edit-note-dialog-form').dialog({
-        height: 475,
-        width: 600,
+        height: 460,
+        width: 565,
         modal: false,
         buttons: finalButtons
     })
   )
-###

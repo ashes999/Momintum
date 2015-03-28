@@ -34,7 +34,7 @@ window.addSection = (json) ->
 window.unlockCanvas = (sectionId) ->
   if (canEdit)
     # Section events
-    $('#' + sectionId).draggable({                
+    $("##{sectionId}").draggable({                
       stop: (event, ui) ->
         id = getIdFromEvent(ui)
         x = Math.round(ui.position.left)
