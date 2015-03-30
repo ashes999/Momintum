@@ -23,7 +23,7 @@ window.patch = (relativeUrl, data, callback) ->
   ajax('PATCH', relativeUrl, data, callback)
 
 # 'delete' is a reserved keyword in JSl
-window.http_delete = (relativeUrl, data, callback) ->
+window.httpDelete = (relativeUrl, data, callback) ->
   ajax('DELETE', relativeUrl, data, callback)
     
 window.ajax = (method, relativeUrl, data, callback) ->

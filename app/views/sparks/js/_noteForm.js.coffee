@@ -19,7 +19,7 @@ updateButton =  {
     index = $('#Index').val()
     $(this).dialog("close")
   
-    makePostCall("/SparkNote/Update", { "noteId": id, "content": content, "status": status })
+    makePostCall("/section_note/update", { "noteId": id, "content": content, "status": status })
   
     notes[index] = content
     noteSections[index] = sectionId
@@ -33,9 +33,9 @@ deleteButton = {
   text: 'Delete',
   click: () ->
     $(this).dialog("close")
-    pseudoId =  $('#NotePseudoId').val()
-    makePostCall("/SparkNote/Delete", { "noteId": $('#NoteId').val() }, () ->
-      $("#note-#{pseudoId}").remove()
+    id =  $('#note_id').val()
+    httpDelete("/section_note/destroy", { "id": id }, () ->
+      $("#note-#{id}").remove()
     )
 }
 

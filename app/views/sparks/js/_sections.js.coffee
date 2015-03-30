@@ -17,7 +17,7 @@ window.addSection = (json) ->
   nameField = document.createElement("div")
   nameFieldId = "section#{json.id}Name"
   nameField.id = nameFieldId          
-  nameField.innerHTML = "<strong>#{json.name}</strong>"
+  nameField.innerHTML = "<strong>#{json.name || 'New Section'}</strong>"
   section.appendChild(nameField)
   
   $('#' + nameField.id).css("float", "left")
@@ -26,8 +26,9 @@ window.addSection = (json) ->
   unlockCanvas(section.id)
   addSectionControls(section, nameFieldId)
   
-  for note in json.section_notes
-    createNote(note)
+  if json.section_notes?
+    for note in json.section_notes
+      createNote(note)
   
   #resizeContainerIfNecessary(null, null, null)
 
@@ -96,7 +97,7 @@ window.addSectionControls = (section, nameFieldId) ->
     
     $("##{section.id}-deleteSection").click((event, ui) ->
       confirm("Are you sure? All notes from this section will be deleted.", () ->
-        http_delete("/canvas_sections/destroy?sectionId=#{section.id}", null, () ->
+        httpDelete("/canvas_sections/destroy?sectionId=#{section.id}", null, () ->
           $("##{section.id}").remove()
         )
       )

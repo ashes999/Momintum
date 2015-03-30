@@ -18,10 +18,10 @@ window.createNote = (json) ->
   $("##{text.id}").text(id)
 
   $("##{newNote.id}").click(() ->
-    $('#NoteText').val(json.text)
-    $('#NoteId').val(id)
-    $('#NoteStatus').val(status)
-    $('#NoteSection').val(sectionId)
+    $('#note_text').val(json.text)
+    $('#note_id').val(id)
+    $('#note_status').val(status)
+    $('#note_sectionId').val(sectionId)
 
     # clear and re-clone
     finalButtons = formButtons.slice(0)

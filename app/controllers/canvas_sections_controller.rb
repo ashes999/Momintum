@@ -16,7 +16,7 @@ if Rails.application.config.feature_map.enabled?(:ideation)
           max_y = lowest_canvas.y + lowest_canvas.height
         end
         
-        section = CanvasSection.new({:spark_id => spark.id, :name => 'New Section', :x => 0, :y => max_y, :width => 300, :height => 150})
+        section = CanvasSection.new(:spark_id => spark.id, :y => max_y)
       end
       
       if !section.nil? && section.valid?
