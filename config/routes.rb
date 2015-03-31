@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   get 'users/index'
   get 'users/show'
   
-  get 'section_note/update'
+  patch 'section_note/update'
   delete 'section_note/destroy'
 
 

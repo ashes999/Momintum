@@ -1,9 +1,10 @@
-window.createNote = (json) ->
+window.createNote = (id) ->
+  json = notes[id]
   sectionId = json.canvas_section_id
   newNote = document.createElement("div")
   
-  id = json.id
   status = json.status
+  notes[id] = json
 
   newNote.id = "note-#{id}"
   newNote.className = "note #{status.toLowerCase()}"
@@ -18,10 +19,11 @@ window.createNote = (json) ->
   $("##{text.id}").text(id)
 
   $("##{newNote.id}").click(() ->
+    json = notes[id]
     $('#note_text').val(json.text)
-    $('#note_id').val(id)
-    $('#note_status').val(status)
-    $('#note_sectionId').val(sectionId)
+    $('#note_id').val(json.id)
+    $('#note_status').val(json.status)
+    $('#note_sectionId').val(json.sectionId)
 
     # clear and re-clone
     finalButtons = formButtons.slice(0)

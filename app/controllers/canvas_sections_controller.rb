@@ -10,7 +10,7 @@ if Rails.application.config.feature_map.enabled?(:ideation)
         # Place under the rest of the canvases
         lowest_canvas = spark.canvas_sections.order("y + height DESC").first
         
-        if lowest_canvas.nil?
+        if lowest_canvas.nil? || lowest_canvas.y.nil? || lowest_canvas.height.nil?
           max_y = 0
         else
           max_y = lowest_canvas.y + lowest_canvas.height
