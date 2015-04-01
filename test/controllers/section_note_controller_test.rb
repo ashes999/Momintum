@@ -29,29 +29,32 @@ class SectionNoteControllerTest < ActionController::TestCase
     @spark.reload
     assert_equal(base_count + 1, @spark.canvas_sections.count)
   end
-  
-  test 'can\'t edit section without signing in as owner' do
-    patch :update, {:sectionId => id_for(@canvas), :x => 99, :y => 99}
-    @canvas.reload
-    assert_equal(0, @canvas.x)
-    assert_equal(0, @canvas.y)
+=end
+
+  test 'can\'t update note without signing in as spark owner' do
+    original_text = 'test note'
+    canvas = CanvasSection.create(:spark_id => @spark.id, :name => 'Destroy Canvas', :x => 0, :y => 0, :width => 200, :height => 100)
+    note = SectionNote.create(:canvas_section_id => canvas.id, :text => original_text, :status => 'undecided')
+    assert note.valid?, note.errors.messages
     
-    non_owner = create_user(:username => 'hacker37')
+    patch :update, { :id => note.id, :text => 'not logged in'}
+    note.reload
+    assert_equal(original_text, note.text)
     
+    non_owner = create_user(:username => 'randomz')
     sign_in(non_owner)
-    patch :update, {:sectionId => id_for(@canvas), :x => 99, :y => 99}
-    @canvas.reload
-    assert_equal(0, @canvas.x)
-    assert_equal(0, @canvas.y)
+    patch :update, { :id => note.id, :text => 'logged in'}
+    note.reload
+    assert_equal(original_text, note.text)
     
     sign_out(non_owner)
     sign_in(@owner)
-    patch :update, {:sectionId => id_for(@canvas), :x => 99, :y => 99}
-    @canvas.reload
-    assert_equal(99, @canvas.x)
-    assert_equal(99, @canvas.y)
+    puts "Last try"
+    patch :update, { :id => note.id, :text => 'successful update'}
+    note.reload
+    assert_equal('successful update', note.text)
   end
-=end
+
   test 'can\'t destroy note without signing in as spark owner' do
     canvas = CanvasSection.create(:spark_id => @spark.id, :name => 'Destroy Canvas', :x => 0, :y => 0, :width => 200, :height => 100)
     note = SectionNote.create(:canvas_section_id => canvas.id, :text => 'test note', :status => 'undecided')

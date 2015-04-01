@@ -7,16 +7,18 @@
 <% end %>
 
 <div id="tabs">
-    <ul>
-        <li><a href="#tabs-details" id="detailsTab">Details</a></li>
-        
-        <% if Rails.application.config.feature_map.enabled?(:ideation) %> 
-          <li><a href="#tabs-ideation" id="ideationTab">Ideation</a></li>
-        <% end %>
-    </ul>
+  <ul>
+    <li><a href="#tabs-details" id="detailsTab">Details</a></li>
+    
+    <% if Rails.application.config.feature_map.enabled?(:ideation) %> 
+      <li><a href="#tabs-ideation" id="ideationTab">Ideation</a></li>
+    <% end %>
+  </ul>
 
-<%= render 'main_details' %>
+  <%= render 'main_details' %>
+  
+  <% if Rails.application.config.feature_map.enabled?(:ideation) %> 
+    <%= render 'ideation' %>
+  <% end %>
 
-<% if Rails.application.config.feature_map.enabled?(:ideation) %> 
-  <%= render 'ideation' %>
-<% end %>
+</div>
