@@ -16,15 +16,15 @@ window.createImage = (id, src, width, height) ->
   image.height = height
   return image
 
-window.post = (relativeUrl, data, callback) ->
-  ajax('POST', relativeUrl, data, callback)
+window.httpPost = (relativeUrl, data, callback) ->
+  return ajax('POST', relativeUrl, data, callback)
 
-window.patch = (relativeUrl, data, callback) ->
-  ajax('PATCH', relativeUrl, data, callback)
+window.httpPatch = (relativeUrl, data, callback) ->
+  return ajax('PATCH', relativeUrl, data, callback)
 
 # 'delete' is a reserved keyword in JSl
-window.http_delete = (relativeUrl, data, callback) ->
-  ajax('DELETE', relativeUrl, data, callback)
+window.httpDelete = (relativeUrl, data, callback) ->
+  return ajax('DELETE', relativeUrl, data, callback)
     
 window.ajax = (method, relativeUrl, data, callback) ->
   relativeUrl = relativeUrl.substring(1) if rootUrl.endsWith('/') and relativeUrl.indexOf('/') == 0

@@ -11,21 +11,17 @@ updateButton =  {
   id: "update",
   text: "Update",
   click: () -> 
-    id = $('#NoteId').val() # DB ID
-    content = $('#NoteText').val()
-    status = $('#NoteStatus').val()
-    sectionId = $('#NoteSection').val()
-    pseudoId = $('#NotePseudoId').val()
-    index = $('#Index').val()
+    id = $('#note_id').val() # DB ID
+    text = $('#note_text').val()
+    status = $('#note_status').val()
+    sectionId = $('#note_sectionId').val()
     $(this).dialog("close")
   
-    makePostCall("/SparkNote/Update", { "noteId": id, "content": content, "status": status })
-  
-    notes[index] = content
-    noteSections[index] = sectionId
-    statuses[index] = status
-  
-    document.getElementById("note#{pseudoId}").className = "note #{status.toLowerCase()}"
+    httpPatch("/section_note/update", { "id": id, "text": text, "status": status }, (response) ->
+      notes[id] = response
+      alert 'Note updated.'
+      document.getElementById("note-#{id}").className = "note #{status.toLowerCase()}"
+    )
 }
 
 deleteButton = {
@@ -33,9 +29,10 @@ deleteButton = {
   text: 'Delete',
   click: () ->
     $(this).dialog("close")
-    pseudoId =  $('#NotePseudoId').val()
-    makePostCall("/SparkNote/Delete", { "noteId": $('#NoteId').val() }, () ->
-      $("#note-#{pseudoId}").remove()
+    id =  $('#note_id').val()
+    httpDelete("/section_note/destroy", { "id": id }, () ->
+      $("#note-#{id}").remove()
+      delete notes[id]
     )
 }
 

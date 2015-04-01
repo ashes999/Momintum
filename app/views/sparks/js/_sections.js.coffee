@@ -1,6 +1,6 @@
 window.addNewSection = ->
   # JSON has to be sent as a string, not object, for jQuery.post() to work.
-  post '/canvas_sections/create', { spark_id: <%= @spark.id %> }, (result) ->
+  httpPost '/canvas_sections/create', { spark_id: <%= @spark.id %> }, (result) ->
     addSection( result )
 
 window.addSection = (json) ->
@@ -17,7 +17,7 @@ window.addSection = (json) ->
   nameField = document.createElement("div")
   nameFieldId = "section#{json.id}Name"
   nameField.id = nameFieldId          
-  nameField.innerHTML = "<strong>#{json.name}</strong>"
+  nameField.innerHTML = "<strong>#{json.name || 'New Section'}</strong>"
   section.appendChild(nameField)
   
   $('#' + nameField.id).css("float", "left")
@@ -26,8 +26,10 @@ window.addSection = (json) ->
   unlockCanvas(section.id)
   addSectionControls(section, nameFieldId)
   
-  for note in json.section_notes
-    createNote(note)
+  if json.section_notes?
+    for note in json.section_notes
+      window.notes[note.id] = note
+      createNote(note.id)
   
   #resizeContainerIfNecessary(null, null, null)
 
@@ -39,7 +41,7 @@ window.unlockCanvas = (sectionId) ->
         id = getIdFromEvent(ui)
         x = Math.round(ui.position.left)
         y = Math.round(ui.position.top)
-        patch('/canvas_sections/update', { sectionId: id, x: x, y: y })
+        httpPatch('/canvas_sections/update', { sectionId: id, x: x, y: y })
       ,
       drag: resizeContainerIfNecessary
     }).resizable({
@@ -47,7 +49,7 @@ window.unlockCanvas = (sectionId) ->
         id = getIdFromEvent(ui)
         width = Math.round(ui.size.width)
         height = Math.round(ui.size.height)
-        patch('/canvas_sections/update', { sectionId: id, width: width, height: height })
+        httpPatch('/canvas_sections/update', { sectionId: id, width: width, height: height })
       ,
       resize: resizeContainerIfNecessary
     }).click( -> 
@@ -96,7 +98,7 @@ window.addSectionControls = (section, nameFieldId) ->
     
     $("##{section.id}-deleteSection").click((event, ui) ->
       confirm("Are you sure? All notes from this section will be deleted.", () ->
-        http_delete("/canvas_sections/destroy?sectionId=#{section.id}", null, () ->
+        httpDelete("/canvas_sections/destroy?sectionId=#{section.id}", null, () ->
           $("##{section.id}").remove()
         )
       )
@@ -106,7 +108,7 @@ window.addSectionControls = (section, nameFieldId) ->
         id = eventData.target.id
         id = id.substring(id.lastIndexOf("-") + 1, id.lastIndexOf("Name"))
         newName = $(this).text()
-        post("/canvas_sections/update?sectionId=#{id}&name=#{newName}")
+        httpPatch("/canvas_sections/update?sectionId=#{id}&name=#{newName}")
     )
 
     unlockCanvas(section.id) if (!isLocked)
@@ -116,7 +118,7 @@ window.addSectionControls = (section, nameFieldId) ->
 #
 # "Main" entry point
 #
-
+window.notes = { } # id => note
 <% @spark.canvas_sections.each do |c| %>
 json  = <%= raw c.to_json(:include => :section_notes) %>
 addSection json
