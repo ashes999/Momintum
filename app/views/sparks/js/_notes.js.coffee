@@ -35,3 +35,16 @@ window.createNote = (id) ->
         buttons: finalButtons
     })
   )
+  
+window.createAndSaveNote = (container) ->
+  container = container.parentNode
+  # "section28" => "28"
+  sectionId = container.id.substring(container.id.lastIndexOf('section') + 7)
+
+  httpPost('/section_note/create', 
+  { 'spark_id': <%= @spark.id %>, 'section_id': sectionId, 'text': 'Edit me!' },
+  (result) ->
+      id = result.id
+      notes[id] = result
+      createNote(id)
+  )

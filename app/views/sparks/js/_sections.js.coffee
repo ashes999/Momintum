@@ -31,7 +31,7 @@ window.addSection = (json) ->
       window.notes[note.id] = note
       createNote(note.id)
   
-  #resizeContainerIfNecessary(null, null, null)
+  resizeContainerIfNecessary(null, null, null)
 
 window.unlockCanvas = (sectionId) ->
   if (canEdit)
@@ -78,7 +78,6 @@ window.addSectionControls = (section, nameFieldId) ->
     buttonContainer.id = "#{section.id}-buttons"
     section.appendChild buttonContainer
     $("##{section.id}-buttons").css("float", "right").css("padding", "4").width(32)
-    #section.appendChild(document.createElement("br"))
 
     # Add note button
     addNoteButton = createImage("#{section.id}-newNote", "<%= image_path 'note.png' %>", 32, 32)
