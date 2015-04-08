@@ -8,31 +8,33 @@ class SectionNoteControllerTest < ActionController::TestCase
     assert_not_nil(@canvas)
     assert(@canvas.id > 0)
   end
-=begin  
-  test 'can\'t create section without signing in as owner' do
-    base_count = @spark.canvas_sections.count
+  
+  test 'can\'t create note without signing in as spark owner' do
+    canvas = CanvasSection.create(:spark_id => @spark.id, :name => 'Add Notes to Canvas', :x => 0, :y => 0, :width => 200, :height => 100)
+    base_count = canvas.section_notes.count
     
-    post :create, {:spark_id => @spark.id }
+    post :create, {:spark_id => @spark.id, :section_id => canvas.id, :text => 'POST-it note' }
     @spark.reload
-    assert_equal(base_count, @spark.canvas_sections.count)
+    assert_equal(base_count, canvas.section_notes.count)
     
     non_owner = create_user(:username => 'hacker37')
     
     sign_in(non_owner)
-    post :create, {:spark_id => @spark.id }
+    post :create, {:spark_id => @spark.id, :section_id => canvas.id, :text => 'do something malicious' }
     @spark.reload
-    assert_equal(base_count, @spark.canvas_sections.count)
+    assert_equal(base_count, canvas.section_notes.count)
     
     sign_out(non_owner)
     sign_in(@owner)
-    post :create, {:spark_id => @spark.id }
+    post :create, {:spark_id => @spark.id, :section_id => canvas.id, :text => 'Real Note' }
     @spark.reload
-    assert_equal(base_count + 1, @spark.canvas_sections.count)
+    assert_equal(base_count + 1, canvas.section_notes.count)
+    assert_equal('Real Note', canvas.section_notes[0].text)
   end
-=end
 
   test 'can\'t update note without signing in as spark owner' do
-    original_text = 'test note'
+    original_text = 'initial note text'
+    updated_text = 'updated text'
     canvas = CanvasSection.create(:spark_id => @spark.id, :name => 'Destroy Canvas', :x => 0, :y => 0, :width => 200, :height => 100)
     note = SectionNote.create(:canvas_section_id => canvas.id, :text => original_text, :status => 'undecided')
     assert note.valid?, note.errors.messages
@@ -49,10 +51,9 @@ class SectionNoteControllerTest < ActionController::TestCase
     
     sign_out(non_owner)
     sign_in(@owner)
-    puts "Last try"
-    patch :update, { :id => note.id, :text => 'successful update'}
+    patch :update, { :id => note.id, :text => updated_text}
     note.reload
-    assert_equal('successful update', note.text)
+    assert_equal(updated_text, note.text)
   end
 
   test 'can\'t destroy note without signing in as spark owner' do

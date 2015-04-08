@@ -36,8 +36,9 @@ if Rails.application.config.feature_map.enabled?(:ideation)
       elsif current_user.nil? || !current_user.can_edit?(note.canvas_section.spark)
         message = 'You don\'t have permission to ideate this spark.'
       else
-        note.text = params[:text] #unless params[:text].nil?
-        note.status = params[:status] #unless params[:status].nil?
+        # not required to be specified/updated
+        note.text = params[:text] unless params[:text].nil?
+        note.status = params[:status] unless params[:status].nil?
         note.save
         result = note
       end
