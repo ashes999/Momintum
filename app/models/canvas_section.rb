@@ -4,13 +4,13 @@ class CanvasSection < ActiveRecord::Base
   validates_presence_of :spark
   has_many :section_notes
 
-  # http://stackoverflow.com/a/1716632/210780
-  def after_initialize
+  # http://stackoverflow.com/a/29566511/210780
+  after_initialize do |section|
     # Make sure size is sane if not initialized
-    @x ||= 0
-    @y ||= 0
-    @width ||= 300
-    @height ||= 150
-    @name ||= 'New Section'
+    section.x ||= 0
+    section.y ||= 0
+    section.width ||= 300
+    section.height ||= 150
+    section.name ||= 'New Section'
   end
 end

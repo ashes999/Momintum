@@ -15,8 +15,8 @@ window.createNote = (id) ->
   $("##{text.id}").css("float", "left")
 
   $("#section#{sectionId}").append(newNote)
-  # Visual (was pseudo) ID of the note
-  $("##{text.id}").text(id)
+  # Visual (was pseudo) ID of the note. 0-999
+  $("##{text.id}").text(id % 1000)
 
   $("##{newNote.id}").click(() ->
     json = notes[id]

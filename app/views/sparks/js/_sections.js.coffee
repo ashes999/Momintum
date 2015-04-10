@@ -123,5 +123,5 @@ json  = <%= raw c.to_json(:include => :section_notes) %>
 addSection json
 <% end %>
 
-$('#addSectionButton').button().click( -> addNewSection()) if (canEdit)
+$('#addSectionButton').button().click( -> addNewSection()) if (canEdit) 
   
