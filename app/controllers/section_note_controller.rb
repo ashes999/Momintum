@@ -5,16 +5,19 @@ if Rails.application.config.feature_map.enabled?(:ideation)
     def create
       spark_id = params[:spark_id] 
       section_id = params[:section_id]
+      identifier = params[:identifier]
       
       canvas_section = CanvasSection.find_by_id(section_id)
-      if Spark.find_by_id(spark_id).nil?
+      if identifier.nil?
+        message = 'Please specify an identifier.'
+      elsif Spark.find_by_id(spark_id).nil?
         message = 'This spark doesn\'t exist any more.'
       elsif canvas_section.nil?
         message = 'That section doesn\'t exist any more.'
       elsif current_user.nil? || !current_user.can_edit?(canvas_section.spark)
         message = 'You don\'t have permission to ideate this spark.'
       else
-        note = SectionNote.new(:canvas_section_id => section_id, :status => :undecided, :text => params[:text])
+        note = SectionNote.new(:canvas_section_id => section_id, :identifier => identifier, :status => :undecided, :text => params[:text])
         note.save
         result = note
       end
@@ -31,12 +34,14 @@ if Rails.application.config.feature_map.enabled?(:ideation)
     def update
       note_id = params[:id] 
       note = SectionNote.find_by_id(note_id)
+      
       if note.nil?
         message = 'That note doesn\'t exist.'
       elsif current_user.nil? || !current_user.can_edit?(note.canvas_section.spark)
         message = 'You don\'t have permission to ideate this spark.'
       else
         # not required to be specified/updated
+        note.identifier = params[:identifier] unless params[:identifier].nil?
         note.text = params[:text] unless params[:text].nil?
         note.status = params[:status] unless params[:status].nil?
         note.save

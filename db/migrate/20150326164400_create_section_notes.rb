@@ -3,6 +3,7 @@ class CreateSectionNotes < ActiveRecord::Migration
     create_table :section_notes do |t|
       
       t.integer :canvas_section_id
+      t.string :identifier, limit: 4, null: false
       t.string :status
       t.text :text
 
