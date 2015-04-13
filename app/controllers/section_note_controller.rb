@@ -44,8 +44,12 @@ if Rails.application.config.feature_map.enabled?(:ideation)
         note.identifier = params[:identifier] unless params[:identifier].nil?
         note.text = params[:text] unless params[:text].nil?
         note.status = params[:status] unless params[:status].nil?
-        note.save
-        result = note
+        if note.identifier.length > 4
+          message = "Please enter a 1-4 character identifier."
+        else
+          note.save
+          result = note
+        end
       end
       
       result = { :message => message } if result.nil?
