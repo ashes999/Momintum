@@ -26,7 +26,7 @@ class SectionNoteControllerTest < ActionController::TestCase
     
     sign_out(non_owner)
     sign_in(@owner)
-    post :create, {:spark_id => @spark.id, :section_id => canvas.id, :text => 'Real Note' }
+    post :create, {:spark_id => @spark.id, :section_id => canvas.id, :identifier => 1, :text => 'Real Note' }
     @spark.reload
     assert_equal(base_count + 1, canvas.section_notes.count)
     assert_equal('Real Note', canvas.section_notes[0].text)
@@ -36,7 +36,7 @@ class SectionNoteControllerTest < ActionController::TestCase
     original_text = 'initial note text'
     updated_text = 'updated text'
     canvas = CanvasSection.create(:spark_id => @spark.id, :name => 'Destroy Canvas', :x => 0, :y => 0, :width => 200, :height => 100)
-    note = SectionNote.create(:canvas_section_id => canvas.id, :text => original_text, :status => 'undecided')
+    note = SectionNote.create(:canvas_section_id => canvas.id, :identifier => '1', :text => original_text, :status => 'undecided')
     assert note.valid?, note.errors.messages
     
     patch :update, { :id => note.id, :text => 'not logged in'}
@@ -51,14 +51,15 @@ class SectionNoteControllerTest < ActionController::TestCase
     
     sign_out(non_owner)
     sign_in(@owner)
-    patch :update, { :id => note.id, :text => updated_text}
+    patch :update, { :id => note.id, :text => updated_text, :identifier => 'hi'}
     note.reload
     assert_equal(updated_text, note.text)
+    assert_equal('hi', note.identifier)
   end
 
   test 'can\'t destroy note without signing in as spark owner' do
     canvas = CanvasSection.create(:spark_id => @spark.id, :name => 'Destroy Canvas', :x => 0, :y => 0, :width => 200, :height => 100)
-    note = SectionNote.create(:canvas_section_id => canvas.id, :text => 'test note', :status => 'undecided')
+    note = SectionNote.create(:canvas_section_id => canvas.id, :identifier => '1', :text => 'test note', :status => 'undecided')
     assert note.valid?, note.errors.messages
     assert_not_nil(SectionNote.find_by_id(note.id))
     non_owner = create_user(:username => 'random-user')

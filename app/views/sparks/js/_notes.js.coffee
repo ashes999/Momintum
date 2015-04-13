@@ -15,11 +15,12 @@ window.createNote = (id) ->
   $("##{text.id}").css("float", "left")
 
   $("#section#{sectionId}").append(newNote)
-  # Visual (was pseudo) ID of the note. 0-999
-  $("##{text.id}").text(id % 1000)
+  # identifier on the note
+  $("##{text.id}").text(json.identifier)
 
   $("##{newNote.id}").click(() ->
     json = notes[id]
+    $('#note_identifier').val(json.identifier)
     $('#note_text').val(json.text)
     $('#note_id').val(json.id)
     $('#note_status').val(json.status)
@@ -42,7 +43,7 @@ window.createAndSaveNote = (container) ->
   sectionId = container.id.substring(container.id.lastIndexOf('section') + 7)
 
   httpPost('/section_note/create', 
-  { 'spark_id': <%= @spark.id %>, 'section_id': sectionId, 'text': 'Edit me!' },
+  { 'spark_id': <%= @spark.id %>, 'section_id': sectionId, 'identifier': 'new', 'text': 'Edit me!' },
   (result) ->
       id = result.id
       notes[id] = result

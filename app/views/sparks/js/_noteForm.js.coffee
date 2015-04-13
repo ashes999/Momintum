@@ -12,15 +12,17 @@ updateButton =  {
   text: "Update",
   click: () -> 
     id = $('#note_id').val() # DB ID
+    identifier = $('#note_identifier').val() # alphanumeric, 1-4 characters
     text = $('#note_text').val()
     status = $('#note_status').val()
     sectionId = $('#note_sectionId').val()
     $(this).dialog("close")
   
-    httpPatch("/section_note/update", { "id": id, "text": text, "status": status }, (response) ->
+    httpPatch("/section_note/update", { "id": id, "text": text, "status": status, "identifier": identifier }, (response) ->
       notes[id] = response
       alert 'Note updated.'
       document.getElementById("note-#{id}").className = "note #{status.toLowerCase()}"
+      document.getElementById("note-#{id}-text").innerHTML = identifier
     )
 }
 

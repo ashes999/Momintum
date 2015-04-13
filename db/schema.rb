@@ -66,10 +66,11 @@ ActiveRecord::Schema.define(version: 20150326164400) do
 
   create_table "section_notes", force: :cascade do |t|
     t.integer  "canvas_section_id"
+    t.string   "identifier",        limit: 4, null: false
     t.string   "status"
     t.text     "text"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   create_table "sparks", force: :cascade do |t|
