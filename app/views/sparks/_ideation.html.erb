@@ -13,7 +13,7 @@
   <div id="edit-note-dialog-form" title="Edit a Note" style="display: none;">
     <form id="editNoteForm" method="get" action="">
       <fieldset>
-        <%= text_field(:note, :identifier) %>
+        Identifier (1-4 characters) <%= text_field(:note, :identifier) %>
   			<%= text_area(:note, :text, cols: 55, rows: 11) %>
   		  <%= select_tag(:note_status, options_for_select([ ["Undecided", "undecided"], ['Accepted', 'accepted'], ['Rejected', 'rejected'] ])) %>
   			<%= hidden_field(:note, :id) %>

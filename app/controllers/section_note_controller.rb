@@ -41,7 +41,7 @@ if Rails.application.config.feature_map.enabled?(:ideation)
         message = 'You don\'t have permission to ideate this spark.'
       else
         # not required to be specified/updated
-        note.identifier = params[:identifier] unless params[:identifier].nil?
+        note.identifier = params[:identifier] unless params[:identifier].nil? || params[:identifier].length > 4
         note.text = params[:text] unless params[:text].nil?
         note.status = params[:status] unless params[:status].nil?
         note.save

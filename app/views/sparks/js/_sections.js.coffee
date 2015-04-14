@@ -25,13 +25,12 @@ window.addSection = (json) ->
   
   unlockCanvas(section.id)
   addSectionControls(section, nameFieldId)
+  resizeContainerIfNecessary(null, null, $("#section#{json.id}"))
   
   if json.section_notes?
     for note in json.section_notes
       window.notes[note.id] = note
       createNote(note.id)
-  
-  resizeContainerIfNecessary(null, null, null)
 
 window.unlockCanvas = (sectionId) ->
   if (canEdit)
@@ -64,7 +63,6 @@ window.unlockCanvas = (sectionId) ->
 
 window.resizeContainerIfNecessary = (event, data, child) ->
   child = $(this) if !child?
-
   container = $("#tabs-ideation")
   padding = 100            
 

@@ -19,10 +19,11 @@ updateButton =  {
     $(this).dialog("close")
   
     httpPatch("/section_note/update", { "id": id, "text": text, "status": status, "identifier": identifier }, (response) ->
-      notes[id] = response
-      alert 'Note updated.'
-      document.getElementById("note-#{id}").className = "note #{status.toLowerCase()}"
-      document.getElementById("note-#{id}-text").innerHTML = identifier
+      if !response.message?
+        notes[id] = response
+        alert 'Note updated'
+        document.getElementById("note-#{id}").className = "note #{status.toLowerCase()}"
+        document.getElementById("note-#{id}-text").innerHTML = identifier
     )
 }
 
