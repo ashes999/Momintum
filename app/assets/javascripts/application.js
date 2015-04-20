@@ -16,5 +16,9 @@
 //= require noty-2.3.4/jquery.noty.packaged
 //= require noty-2.3.4/layouts/top
 //= require noty-2.3.4/themes/default
-//= require jquery-ui
 //= require_tree .
+
+// jQuery UI components; these should also have records in application.css
+//= require jquery-ui/draggable
+//= require jquery-ui/resizable
+//= require jquery-ui/tabs
