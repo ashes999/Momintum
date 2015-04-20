@@ -62,7 +62,7 @@ window.unlockCanvas = (sectionId) ->
     nameField.setAttribute("contenteditable", "true")
 
 window.resizeContainerIfNecessary = (event, data, child) ->
-  child = $(this) if !child?
+  child = $("##{event.target.id}") if !child?
   container = $("#tabs-ideation")
   padding = 100            
 

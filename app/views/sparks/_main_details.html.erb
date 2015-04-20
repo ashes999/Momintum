@@ -19,7 +19,13 @@
   <% end %>
   
   <p><strong>Description:</strong></p>
-  <%= raw Rails.application.config.markdown.render(@spark.description) %>
+  <%
+    # TODO: extend the HTML renderer instead of directly filtering here
+    # remove script tags
+    @spark.description.gsub!(/<script.*<\/script>/, '')
+    html = Rails.application.config.markdown.render(@spark.description)
+  %>
+  <%= raw html %>
   <br />
   
   <%= link_to 'Edit', edit_spark_path(@spark) if !current_user.nil? && current_user.can_edit?(@spark) %>

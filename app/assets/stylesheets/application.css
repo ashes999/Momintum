@@ -15,9 +15,11 @@
  */
  
 /*
- *= require jquery-ui
+ *= require jquery-ui/draggable
+ *= require jquery-ui/resizable
+ *= require jquery-ui/tabs
  */
-
+ 
 td {
   padding: 4px 8px;
 }
