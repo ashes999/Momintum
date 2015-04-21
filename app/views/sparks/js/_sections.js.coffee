@@ -63,11 +63,14 @@ window.unlockCanvas = (sectionId) ->
 
 window.resizeContainerIfNecessary = (event, data, child) ->
   child = $("##{event.target.id}") if !child?
-  container = $("#tabs-ideation")
+  container = $("#ideation")
   padding = 100            
 
   if (child.position().top > container.height() - child.height())
+    old_height = container.height()
     container.height(child.position().top + child.height() + padding)
+    new_height = container.height()
+    console.log "Container height updated from #{old_height} to #{new_height} for #{container}"
 
 
 window.addSectionControls = (section, nameFieldId) ->
