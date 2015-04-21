@@ -21,4 +21,5 @@
 // jQuery UI components; these should also have records in application.css
 //= require jquery-ui/draggable
 //= require jquery-ui/resizable
+//= require jquery-ui/button
 //= require jquery-ui/tabs
